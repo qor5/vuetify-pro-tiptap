@@ -50,6 +50,11 @@
   "engines": {
     "node": "^18.0.0 || ^20.0.0 || >=22.0.0"
   },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "^0.25.0"
+    }
+  },
   "scripts": {
     "watch-build": "nodemon --watch src -e ts,vue,scss --exec 'pnpm build:lib'",
     "build:lib": "pnpm check:types && vite build  && pnpm build:styles",
