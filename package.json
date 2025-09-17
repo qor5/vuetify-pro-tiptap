@@ -133,7 +133,7 @@
     "lodash-es": "^4.17.21",
     "lodash-unified": "^1.0.3",
     "nodemon": "^3.1.9",
-    "rollup": "^3.29.4",
+    "rollup": "^4.31.0",
     "rollup-plugin-pure": "^0.2.1",
     "sass": "1.60.0",
     "semantic-release": "^24.2.0",
