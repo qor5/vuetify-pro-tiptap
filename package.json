@@ -29,9 +29,9 @@
       "import": "./lib/vuetify-pro-tiptap.js",
       "require": "./lib/vuetify-pro-tiptap.umd.cjs"
     },
-    "./style.css": {
-      "import": "./lib/style.css",
-      "require": "./lib/style.css"
+    "./vuetify-pro-tiptap.css": {
+      "import": "./lib/vuetify-pro-tiptap.css",
+      "require": "./lib/vuetify-pro-tiptap.css"
     },
     "./styles/": {
       "import": "./lib/styles/",
