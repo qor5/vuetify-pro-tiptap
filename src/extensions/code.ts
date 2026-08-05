@@ -1,16 +1,16 @@
-import type { GeneralOptions } from "@/type";
-import type { CodeOptions as TiptapCodeOptions } from "@tiptap/extension-code";
+import type { CodeOptions as TiptapCodeOptions } from "@tiptap/extension-code"
+import type { GeneralOptions } from "@/type"
 
-import { Code as TiptapCode } from "@tiptap/extension-code";
-import { addCommonAttributes } from "./attribute-config";
+import { Code as TiptapCode } from "@tiptap/extension-code"
+import { addCommonAttributes } from "./attribute-config"
 
-import ActionButton from "./components/ActionButton.vue";
+import ActionButton from "./components/ActionButton.vue"
 
 export interface CodeOptions
   extends TiptapCodeOptions,
     GeneralOptions<CodeOptions> {
   /** HTML attributes that should be allowed on code elements */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 export const Code = /* @__PURE__*/ TiptapCode.extend<CodeOptions>({
@@ -18,8 +18,8 @@ export const Code = /* @__PURE__*/ TiptapCode.extend<CodeOptions>({
     return addCommonAttributes(
       this.parent?.(),
       "code",
-      this.options.allowedAttributes,
-    );
+      this.options.allowedAttributes
+    )
   },
 
   addOptions() {
@@ -32,9 +32,9 @@ export const Code = /* @__PURE__*/ TiptapCode.extend<CodeOptions>({
           isActive: () => editor.isActive("code") || false,
           disabled: !editor.can().toggleCode(),
           icon: "code",
-          tooltip: t("editor.code.tooltip"),
-        },
-      }),
-    };
-  },
-});
+          tooltip: t("editor.code.tooltip")
+        }
+      })
+    }
+  }
+})

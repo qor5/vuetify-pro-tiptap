@@ -1,16 +1,16 @@
-import type { GeneralOptions } from "@/type";
-import type { StrikeOptions as TiptapStrikeOptions } from "@tiptap/extension-strike";
+import type { StrikeOptions as TiptapStrikeOptions } from "@tiptap/extension-strike"
+import type { GeneralOptions } from "@/type"
 
-import { Strike as TiptapStrike } from "@tiptap/extension-strike";
-import { addCommonAttributes } from "./attribute-config";
+import { Strike as TiptapStrike } from "@tiptap/extension-strike"
+import { addCommonAttributes } from "./attribute-config"
 
-import ActionButton from "./components/ActionButton.vue";
+import ActionButton from "./components/ActionButton.vue"
 
 export interface StrikeOptions
   extends TiptapStrikeOptions,
     GeneralOptions<StrikeOptions> {
   /** HTML attributes that should be allowed on strike elements */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 export const Strike = /* @__PURE__*/ TiptapStrike.extend<StrikeOptions>({
@@ -18,8 +18,8 @@ export const Strike = /* @__PURE__*/ TiptapStrike.extend<StrikeOptions>({
     return addCommonAttributes(
       this.parent?.(),
       "strike",
-      this.options.allowedAttributes,
-    );
+      this.options.allowedAttributes
+    )
   },
 
   addOptions() {
@@ -32,9 +32,9 @@ export const Strike = /* @__PURE__*/ TiptapStrike.extend<StrikeOptions>({
           isActive: () => editor.isActive("strike") || false,
           disabled: !editor.can().toggleStrike(),
           icon: "strike",
-          tooltip: t("editor.strike.tooltip"),
-        },
-      }),
-    };
-  },
-});
+          tooltip: t("editor.strike.tooltip")
+        }
+      })
+    }
+  }
+})

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { IconsOptions } from '@/constants/icons'
 import type { NodeSelection } from '@tiptap/pm/state'
 import type { Editor } from '@tiptap/vue-3'
-
 import type { ImageAttrsOptions, ImageTab, ImageTabKey } from './image/types'
-import { ButtonViewReturnComponentProps } from '@/type'
 
+import type { IconsOptions } from '@/constants/icons'
 import { ref } from 'vue'
+
+import { ButtonViewReturnComponentProps } from '@/type'
 import ActionButton from './ActionButton.vue'
 import OriginalThemeProvider from './OriginalThemeProvider.vue'
 

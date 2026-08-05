@@ -1,16 +1,16 @@
-import type { GeneralOptions } from "@/type";
-import type { BulletListOptions as TiptapBulletListOptions } from "@tiptap/extension-bullet-list";
+import type { BulletListOptions as TiptapBulletListOptions } from "@tiptap/extension-bullet-list"
+import type { GeneralOptions } from "@/type"
 
-import { BulletList as TiptapBulletList } from "@tiptap/extension-bullet-list";
-import { addCommonAttributes } from "./attribute-config";
+import { BulletList as TiptapBulletList } from "@tiptap/extension-bullet-list"
+import { addCommonAttributes } from "./attribute-config"
 
-import ActionButton from "./components/ActionButton.vue";
+import ActionButton from "./components/ActionButton.vue"
 
 export interface BulletListOptions
   extends TiptapBulletListOptions,
     GeneralOptions<BulletListOptions> {
   /** HTML attributes that should be allowed on bullet list elements */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 export const BulletList =
@@ -19,8 +19,8 @@ export const BulletList =
       return addCommonAttributes(
         this.parent?.(),
         "bulletList",
-        this.options.allowedAttributes,
-      );
+        this.options.allowedAttributes
+      )
     },
 
     addOptions() {
@@ -33,9 +33,9 @@ export const BulletList =
             isActive: () => editor.isActive("bulletList") || false,
             disabled: !editor.can().toggleBulletList(),
             icon: "bulletList",
-            tooltip: t("editor.bulletlist.tooltip"),
-          },
-        }),
-      };
-    },
-  });
+            tooltip: t("editor.bulletlist.tooltip")
+          }
+        })
+      }
+    }
+  })

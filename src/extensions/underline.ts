@@ -1,16 +1,16 @@
-import type { GeneralOptions } from "@/type";
-import type { UnderlineOptions as TiptapUnderlineOptions } from "@tiptap/extension-underline";
+import type { UnderlineOptions as TiptapUnderlineOptions } from "@tiptap/extension-underline"
+import type { GeneralOptions } from "@/type"
 
-import { Underline as TiptapUnderline } from "@tiptap/extension-underline";
-import { addCommonAttributes } from "./attribute-config";
+import { Underline as TiptapUnderline } from "@tiptap/extension-underline"
+import { addCommonAttributes } from "./attribute-config"
 
-import ActionButton from "./components/ActionButton.vue";
+import ActionButton from "./components/ActionButton.vue"
 
 export interface UnderlineOptions
   extends TiptapUnderlineOptions,
     GeneralOptions<UnderlineOptions> {
   /** HTML attributes that should be allowed on underline elements */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 export const Underline =
@@ -19,8 +19,8 @@ export const Underline =
       return addCommonAttributes(
         this.parent?.(),
         "underline",
-        this.options.allowedAttributes,
-      );
+        this.options.allowedAttributes
+      )
     },
 
     addOptions() {
@@ -33,9 +33,9 @@ export const Underline =
             isActive: () => editor.isActive("underline") || false,
             disabled: !editor.can().toggleUnderline(),
             icon: "underline",
-            tooltip: t("editor.underline.tooltip"),
-          },
-        }),
-      };
-    },
-  });
+            tooltip: t("editor.underline.tooltip")
+          }
+        })
+      }
+    }
+  })

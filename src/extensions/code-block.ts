@@ -1,16 +1,16 @@
-import type { GeneralOptions } from "@/type";
-import type { CodeBlockOptions as TiptapCodeBlockOptions } from "@tiptap/extension-code-block";
+import type { CodeBlockOptions as TiptapCodeBlockOptions } from "@tiptap/extension-code-block"
+import type { GeneralOptions } from "@/type"
 
-import { CodeBlock as TiptapCodeBlock } from "@tiptap/extension-code-block";
-import { addCommonAttributes } from "./attribute-config";
+import { CodeBlock as TiptapCodeBlock } from "@tiptap/extension-code-block"
+import { addCommonAttributes } from "./attribute-config"
 
-import ActionButton from "./components/ActionButton.vue";
+import ActionButton from "./components/ActionButton.vue"
 
 export interface CodeBlockOptions
   extends TiptapCodeBlockOptions,
     GeneralOptions<CodeBlockOptions> {
   /** HTML attributes that should be allowed on code block elements */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 export const CodeBlock =
@@ -19,8 +19,8 @@ export const CodeBlock =
       return addCommonAttributes(
         this.parent?.(),
         "codeBlock",
-        this.options.allowedAttributes,
-      );
+        this.options.allowedAttributes
+      )
     },
 
     addOptions() {
@@ -33,9 +33,9 @@ export const CodeBlock =
             isActive: () => editor.isActive("codeBlock") || false,
             disabled: !editor.can().toggleCodeBlock(),
             icon: "codeBlock",
-            tooltip: t("editor.codeblock.tooltip"),
-          },
-        }),
-      };
-    },
-  });
+            tooltip: t("editor.codeblock.tooltip")
+          }
+        })
+      }
+    }
+  })

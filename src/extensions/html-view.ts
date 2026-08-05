@@ -1,141 +1,141 @@
-import type { GeneralOptions } from "@/type";
-import type { Editor } from "@tiptap/core";
-import { Extension } from "@tiptap/core";
-import { registerGlobalAllowedAttributes } from "./attribute-config";
-import ActionButton from "./components/ActionButton.vue";
+import type { Editor } from "@tiptap/core"
+import type { GeneralOptions } from "@/type"
+import { Extension } from "@tiptap/core"
+import { registerGlobalAllowedAttributes } from "./attribute-config"
+import ActionButton from "./components/ActionButton.vue"
 
 export interface HtmlViewOptions extends GeneralOptions<HtmlViewOptions> {
   /** Global HTML attributes that can be inherited by other extensions */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 // Helper functions outside the extension
 function createOverlay(editor: Editor) {
   // Get editor DOM element
-  const editorElement = editor.view.dom;
-  const editorParent = editorElement.parentElement;
+  const editorElement = editor.view.dom
+  const editorParent = editorElement.parentElement
 
-  if (!editorParent) return null;
+  if (!editorParent) return null
 
   // Save current scroll position before making any changes
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft
 
   // Create overlay container
-  const overlay = document.createElement("div");
-  overlay.className = "tiptap-html-overlay";
-  overlay.style.position = "absolute";
-  overlay.style.top = "0";
-  overlay.style.left = "0";
-  overlay.style.width = "100%";
-  overlay.style.height = "100%";
-  overlay.style.backgroundColor = "#f8f9fa";
-  overlay.style.zIndex = "10";
-  overlay.style.display = "flex";
-  overlay.style.flexDirection = "column";
-  overlay.style.boxSizing = "border-box";
-  overlay.style.border = "1px solid #ddd";
+  const overlay = document.createElement("div")
+  overlay.className = "tiptap-html-overlay"
+  overlay.style.position = "absolute"
+  overlay.style.top = "0"
+  overlay.style.left = "0"
+  overlay.style.width = "100%"
+  overlay.style.height = "100%"
+  overlay.style.backgroundColor = "#f8f9fa"
+  overlay.style.zIndex = "10"
+  overlay.style.display = "flex"
+  overlay.style.flexDirection = "column"
+  overlay.style.boxSizing = "border-box"
+  overlay.style.border = "1px solid #ddd"
 
   // Create HTML editing area
-  const textarea = document.createElement("textarea");
-  textarea.className = "tiptap-html-editor";
-  textarea.style.width = "100%";
-  textarea.style.height = "100%";
-  textarea.style.padding = "12px";
-  textarea.style.border = "none";
-  textarea.style.resize = "none";
-  textarea.style.fontFamily = "monospace";
-  textarea.style.fontSize = "14px";
-  textarea.style.backgroundColor = "transparent";
-  textarea.style.flex = "1";
-  textarea.style.outline = "none";
-  textarea.style.color = "#333";
+  const textarea = document.createElement("textarea")
+  textarea.className = "tiptap-html-editor"
+  textarea.style.width = "100%"
+  textarea.style.height = "100%"
+  textarea.style.padding = "12px"
+  textarea.style.border = "none"
+  textarea.style.resize = "none"
+  textarea.style.fontFamily = "monospace"
+  textarea.style.fontSize = "14px"
+  textarea.style.backgroundColor = "transparent"
+  textarea.style.flex = "1"
+  textarea.style.outline = "none"
+  textarea.style.color = "#333"
 
   // Set HTML content to the text area
-  const currentContent = editor.getHTML();
+  const currentContent = editor.getHTML()
 
   // Save original content for later restoration
-  editor.storage.htmlView.editorContent = currentContent;
+  editor.storage.htmlView.editorContent = currentContent
 
   // Format HTML content
-  const formattedHtml = formatHtml(currentContent);
-  textarea.value = formattedHtml;
+  const formattedHtml = formatHtml(currentContent)
+  textarea.value = formattedHtml
 
   // Save formatted HTML content
-  editor.storage.htmlView.htmlContent = formattedHtml;
+  editor.storage.htmlView.htmlContent = formattedHtml
 
   // Add the editing area to the overlay
-  overlay.appendChild(textarea);
+  overlay.appendChild(textarea)
 
   // Add the overlay to the editor parent container
-  editorParent.style.position = "relative";
+  editorParent.style.position = "relative"
 
   // Get the original dimensions before appending the overlay
-  const originalWidth = editorElement.offsetWidth;
-  const originalHeight = editorElement.offsetHeight;
+  const originalWidth = editorElement.offsetWidth
+  const originalHeight = editorElement.offsetHeight
 
   // Force the overlay to have the exact same dimensions as the editor
-  overlay.style.width = `${originalWidth}px`;
-  overlay.style.height = `${originalHeight}px`;
-  overlay.style.minHeight = `${originalHeight}px`;
+  overlay.style.width = `${originalWidth}px`
+  overlay.style.height = `${originalHeight}px`
+  overlay.style.minHeight = `${originalHeight}px`
 
   // Add smooth transition for any dimension changes
-  overlay.style.transition = "none";
+  overlay.style.transition = "none"
 
-  editorParent.appendChild(overlay);
+  editorParent.appendChild(overlay)
 
   // Focus on the HTML editing area without scrolling
   setTimeout(() => {
     // Use preventScroll to avoid automatic scrolling
-    textarea.focus({ preventScroll: true });
+    textarea.focus({ preventScroll: true })
 
     // Restore the original scroll position
     // window.scrollTo(scrollLeft, 0);
 
-    console.log("Switched to HTML view mode");
-  }, 10);
+    console.log("Switched to HTML view mode")
+  }, 10)
 
   // Add input event to update stored HTML content and editor content in real-time
   textarea.addEventListener("input", () => {
     // Update stored HTML content
-    editor.storage.htmlView.htmlContent = textarea.value;
+    editor.storage.htmlView.htmlContent = textarea.value
 
     // Sync to rich text editor in real-time without affecting HTML editing experience
     try {
       // Mark update source as HTML editor
-      editor.storage.htmlView.isUpdatingFromHTML = true;
+      editor.storage.htmlView.isUpdatingFromHTML = true
 
       // Parse HTML content
-      const parsedHtml = parseHtml(textarea.value);
+      const parsedHtml = parseHtml(textarea.value)
 
       // Use commands API to update editor content
-      editor.commands.setContent(parsedHtml, false);
+      editor.commands.setContent(parsedHtml, false)
 
       // Ensure editor state updates and triggers v-model update
       // This is key: manually trigger update event to ensure v-model syncs correctly
-      const tr = editor.state.tr;
-      tr.setMeta("preventUpdate", false);
-      tr.setMeta("addToHistory", false);
-      editor.view.dispatch(tr);
+      const tr = editor.state.tr
+      tr.setMeta("preventUpdate", false)
+      tr.setMeta("addToHistory", false)
+      editor.view.dispatch(tr)
 
       // Key: manually trigger update event to ensure v-model syncs
       if (editor.options.onUpdate) {
         editor.options.onUpdate({
           editor,
-          transaction: tr,
-        });
+          transaction: tr
+        })
       }
     } catch (error) {
-      console.error("Error syncing HTML to editor:", error);
+      console.error("Error syncing HTML to editor:", error)
     } finally {
       // Delay resetting flag by one frame to ensure update is complete
       requestAnimationFrame(() => {
-        editor.storage.htmlView.isUpdatingFromHTML = false;
-      });
+        editor.storage.htmlView.isUpdatingFromHTML = false
+      })
     }
-  });
+  })
 
-  return overlay;
+  return overlay
 }
 
 // Format HTML content (beautify and escape)
@@ -145,11 +145,11 @@ function formatHtml(html: string) {
     .replace(/<div class="tiptap-html-overlay"[^>]*>[\s\S]*?<\/div>/gi, "")
     .replace(
       /<textarea class="tiptap-html-editor"[^>]*>[\s\S]*?<\/textarea>/gi,
-      "",
-    );
+      ""
+    )
 
   // More code can be added here to beautify HTML
-  return cleanContent;
+  return cleanContent
 }
 
 // Parse HTML content (restore from edit state)
@@ -159,10 +159,10 @@ function parseHtml(html: string) {
     .replace(/<div class="tiptap-html-overlay"[^>]*>[\s\S]*?<\/div>/gi, "")
     .replace(
       /<textarea class="tiptap-html-editor"[^>]*>[\s\S]*?<\/textarea>/gi,
-      "",
-    );
+      ""
+    )
 
-  return cleanContent;
+  return cleanContent
 }
 
 // Find editor toolbar and add disabled state to all buttons
@@ -170,38 +170,38 @@ function disableAllToolbarButtons(editor: Editor) {
   try {
     // Create or get global flag for disabling all toolbar buttons
     if ((window as any).tiptapGlobalState === undefined) {
-      (window as any).tiptapGlobalState = {};
+      (window as any).tiptapGlobalState = {}
     }
 
     // Set global state indicating HTML mode is active
-    (window as any).tiptapGlobalState.htmlModeActive = true;
+    (window as any).tiptapGlobalState.htmlModeActive = true
 
     // Manually trigger toolbar update (if there's a re-rendering mechanism)
     const event = new CustomEvent("tiptap-html-mode-changed", {
-      detail: { isHtmlMode: true },
-    });
-    document.dispatchEvent(event);
+      detail: { isHtmlMode: true }
+    })
+    document.dispatchEvent(event)
 
     // Add class name to editor container to trigger CSS disabling
-    const editorContainer = document.querySelector(".vuetify-pro-tiptap");
+    const editorContainer = document.querySelector(".vuetify-pro-tiptap")
     if (editorContainer) {
-      editorContainer.classList.add("html-view-active");
+      editorContainer.classList.add("html-view-active")
     }
 
     // Directly manipulate DOM again to find and mark HTML button
     setTimeout(() => {
       // Try to find HTML button through multiple methods
       // 1. Through SVG path
-      const buttons = document.querySelectorAll(".v-toolbar button");
+      const buttons = document.querySelectorAll(".v-toolbar button")
       buttons.forEach((btn) => {
-        const svg = btn.querySelector(".v-icon svg");
+        const svg = btn.querySelector(".v-icon svg")
         if (svg) {
-          const path = svg.querySelector("path");
-          const d = path?.getAttribute("d") || "";
+          const path = svg.querySelector("path")
+          const d = path?.getAttribute("d") || ""
           // Match common code icon path
           if (
             d.includes(
-              "M12,17.56L16.07,16.43L16.62,10.33H9.38L9.2,8.3H16.8L17,6.31H7L7.56,12.32H14.45L14.22,14.9L12,15.5L9.78,14.9L9.64,13.24H7.64L7.93,16.43L12,17.56M4.07,3H19.93L18.5,19.2L12,21L5.5,19.2L4.07,3Z",
+              "M12,17.56L16.07,16.43L16.62,10.33H9.38L9.2,8.3H16.8L17,6.31H7L7.56,12.32H14.45L14.22,14.9L12,15.5L9.78,14.9L9.64,13.24H7.64L7.93,16.43L12,17.56M4.07,3H19.93L18.5,19.2L12,21L5.5,19.2L4.07,3Z"
             )
           ) {
             btn.setAttribute("data-htmlview-btn", "true");
@@ -211,22 +211,22 @@ function disableAllToolbarButtons(editor: Editor) {
             (btn as HTMLElement).style.cursor = "pointer";
             (btn as HTMLElement).style.backgroundColor =
               "rgba(25, 118, 210, 0.12)";
-            (btn as HTMLElement).style.zIndex = "10000";
-            btn.removeAttribute("disabled");
+            (btn as HTMLElement).style.zIndex = "10000"
+            btn.removeAttribute("disabled")
           } else {
             // Ensure all other buttons are not clickable
             (btn as HTMLElement).style.pointerEvents = "none";
             (btn as HTMLElement).style.opacity = "0.4";
-            (btn as HTMLElement).style.cursor = "not-allowed";
-            btn.setAttribute("disabled", "true");
+            (btn as HTMLElement).style.cursor = "not-allowed"
+            btn.setAttribute("disabled", "true")
           }
         }
-      });
-    }, 50);
+      })
+    }, 50)
 
-    console.log("All editor tools have been disabled");
+    console.log("All editor tools have been disabled")
   } catch (error) {
-    console.error("Failed to disable toolbar buttons:", error);
+    console.error("Failed to disable toolbar buttons:", error)
   }
 }
 
@@ -235,46 +235,46 @@ function enableAllToolbarButtons(editor: Editor) {
   try {
     // Update global state
     if ((window as any).tiptapGlobalState !== undefined) {
-      (window as any).tiptapGlobalState.htmlModeActive = false;
+      (window as any).tiptapGlobalState.htmlModeActive = false
     }
 
     // Trigger custom event to notify toolbar update
     const event = new CustomEvent("tiptap-html-mode-changed", {
-      detail: { isHtmlMode: false },
-    });
-    document.dispatchEvent(event);
+      detail: { isHtmlMode: false }
+    })
+    document.dispatchEvent(event)
 
     // Remove disabled class name from editor container
-    const editorContainer = document.querySelector(".vuetify-pro-tiptap");
+    const editorContainer = document.querySelector(".vuetify-pro-tiptap")
     if (editorContainer) {
-      editorContainer.classList.remove("html-view-active");
+      editorContainer.classList.remove("html-view-active")
     }
 
     // Find and reset all buttons directly
-    const buttons = document.querySelectorAll(".v-toolbar button");
+    const buttons = document.querySelectorAll(".v-toolbar button")
     buttons.forEach((btn) => {
       // Remove disabled attribute
-      btn.removeAttribute("disabled");
-      btn.removeAttribute("aria-disabled");
+      btn.removeAttribute("disabled")
+      btn.removeAttribute("aria-disabled")
 
       // Reset styles
       if (btn instanceof HTMLElement) {
-        btn.style.pointerEvents = "";
-        btn.style.opacity = "";
-        btn.style.backgroundColor = "";
-        btn.style.cursor = "";
-        btn.style.zIndex = "";
-        btn.style.position = "";
-        btn.style.border = "";
+        btn.style.pointerEvents = ""
+        btn.style.opacity = ""
+        btn.style.backgroundColor = ""
+        btn.style.cursor = ""
+        btn.style.zIndex = ""
+        btn.style.position = ""
+        btn.style.border = ""
 
         // Remove event prevention
-        btn.onclick = null;
+        btn.onclick = null
       }
-    });
+    })
 
-    console.log("All editor tools have been enabled");
+    console.log("All editor tools have been enabled")
   } catch (error) {
-    console.error("Failed to enable toolbar buttons:", error);
+    console.error("Failed to enable toolbar buttons:", error)
   }
 }
 
@@ -282,35 +282,35 @@ function enableAllToolbarButtons(editor: Editor) {
 function activateHtmlMode(editor: Editor) {
   try {
     // Get editor dimensions FIRST, before any modifications
-    const editorElement = editor.view.dom;
-    const editorParent = editorElement.parentElement;
+    const editorElement = editor.view.dom
+    const editorParent = editorElement.parentElement
     // Store original dimensions right at the beginning
-    let originalWidth = 0;
-    let originalHeight = 0;
-    let originalScrollHeight = 0;
+    let originalWidth = 0
+    let originalHeight = 0
+    let originalScrollHeight = 0
 
     if (editorParent) {
-      console.log(editorParent, "editorParent");
-      originalWidth = editorParent.offsetWidth;
-      originalHeight = editorParent.offsetHeight;
-      originalScrollHeight = editorParent.scrollHeight;
+      console.log(editorParent, "editorParent")
+      originalWidth = editorParent.offsetWidth
+      originalHeight = editorParent.offsetHeight
+      originalScrollHeight = editorParent.scrollHeight
     }
 
     // Disable all other plugins/features
-    const extensions = editor.extensionManager.extensions;
+    const extensions = editor.extensionManager.extensions
     for (const extension of extensions) {
       // Skip HTML view plugin itself
-      if (extension.name === "htmlView") continue;
+      if (extension.name === "htmlView") continue
 
       // Temporarily disable other plugins
       if (extension.options && typeof extension.options.enable === "boolean") {
         // Save current state for later restoration
         if (!editor.storage.htmlView.disabledExtensions) {
-          editor.storage.htmlView.disabledExtensions = {};
+          editor.storage.htmlView.disabledExtensions = {}
         }
         editor.storage.htmlView.disabledExtensions[extension.name] =
-          extension.options.enable;
-        extension.options.enable = false;
+          extension.options.enable
+        extension.options.enable = false
       }
     }
 
@@ -319,38 +319,38 @@ function activateHtmlMode(editor: Editor) {
       // Store dimensions as CSS variables for consistent sizing
       editorParent.style.setProperty(
         "--tiptap-editor-width",
-        `${originalWidth}px`,
-      );
+        `${originalWidth}px`
+      )
       editorParent.style.setProperty(
         "--tiptap-editor-height",
-        `${originalHeight}px`,
-      );
+        `${originalHeight}px`
+      )
       editorParent.style.setProperty(
         "--tiptap-editor-scroll-height",
-        `${originalScrollHeight}px`,
-      );
+        `${originalScrollHeight}px`
+      )
 
       // Add class to fix dimensions during transition
-      editorParent.classList.add("tiptap-preserve-dimensions");
+      editorParent.classList.add("tiptap-preserve-dimensions")
     }
 
     // Disable all buttons on the toolbar
-    disableAllToolbarButtons(editor);
+    disableAllToolbarButtons(editor)
 
     // Create overlay and save reference
-    const overlay = createOverlay(editor);
+    const overlay = createOverlay(editor)
     if (overlay) {
-      editor.storage.htmlView.overlayElement = overlay;
-      editor.storage.htmlView.isHtmlMode = true;
+      editor.storage.htmlView.overlayElement = overlay
+      editor.storage.htmlView.isHtmlMode = true
 
       // Add style to editor container to indicate currently in HTML mode
-      const editorElement = editor.view.dom;
+      const editorElement = editor.view.dom
       if (editorElement.parentElement) {
-        editorElement.parentElement.classList.add("html-view-mode");
+        editorElement.parentElement.classList.add("html-view-mode")
       }
     }
   } catch (error) {
-    console.error("Failed to switch to HTML view:", error);
+    console.error("Failed to switch to HTML view:", error)
   }
 }
 
@@ -358,107 +358,107 @@ function activateHtmlMode(editor: Editor) {
 function deactivateHtmlMode(editor: Editor) {
   try {
     // Get updated HTML content
-    const htmlContent = editor.storage.htmlView.htmlContent;
+    const htmlContent = editor.storage.htmlView.htmlContent
 
     // Remove overlay
     if (editor.storage.htmlView.overlayElement) {
-      editor.storage.htmlView.overlayElement.remove();
-      editor.storage.htmlView.overlayElement = null;
+      editor.storage.htmlView.overlayElement.remove()
+      editor.storage.htmlView.overlayElement = null
     }
 
     // Enable all toolbar buttons
-    enableAllToolbarButtons(editor);
+    enableAllToolbarButtons(editor)
 
     // Remove HTML mode indicator style
-    const editorElement = editor.view.dom;
+    const editorElement = editor.view.dom
     if (editorElement.parentElement) {
-      editorElement.parentElement.classList.remove("html-view-mode");
+      editorElement.parentElement.classList.remove("html-view-mode")
       // Remove dimension preservation class
       editorElement.parentElement.classList.remove(
-        "tiptap-preserve-dimensions",
-      );
+        "tiptap-preserve-dimensions"
+      )
 
       // Clean up CSS variables after a brief delay to prevent flickering
       setTimeout(() => {
         if (editorElement.parentElement) {
           editorElement.parentElement.style.removeProperty(
-            "--tiptap-editor-width",
-          );
+            "--tiptap-editor-width"
+          )
           editorElement.parentElement.style.removeProperty(
-            "--tiptap-editor-height",
-          );
+            "--tiptap-editor-height"
+          )
           editorElement.parentElement.style.removeProperty(
-            "--tiptap-editor-scroll-height",
-          );
+            "--tiptap-editor-scroll-height"
+          )
         }
-      }, 50);
+      }, 50)
     }
 
     // If there's HTML content, apply it to the editor
     if (htmlContent && htmlContent.trim() !== "") {
-      const parsedHtml = parseHtml(htmlContent);
+      const parsedHtml = parseHtml(htmlContent)
 
       // Mark update source
-      editor.storage.htmlView.isUpdatingFromHTML = true;
+      editor.storage.htmlView.isUpdatingFromHTML = true
 
       // Set editor content
-      editor.commands.setContent(parsedHtml);
+      editor.commands.setContent(parsedHtml)
 
       // Manually trigger update
-      const tr = editor.state.tr;
-      tr.setMeta("preventUpdate", false);
-      tr.setMeta("addToHistory", false);
-      editor.view.dispatch(tr);
+      const tr = editor.state.tr
+      tr.setMeta("preventUpdate", false)
+      tr.setMeta("addToHistory", false)
+      editor.view.dispatch(tr)
 
       // Key: manually trigger update event to ensure v-model syncs
       if (editor.options.onUpdate) {
         editor.options.onUpdate({
           editor,
-          transaction: tr,
-        });
+          transaction: tr
+        })
       }
 
       // Delay resetting marker
       requestAnimationFrame(() => {
-        editor.storage.htmlView.isUpdatingFromHTML = false;
-      });
+        editor.storage.htmlView.isUpdatingFromHTML = false
+      })
 
-      console.log("Applied HTML to editor");
+      console.log("Applied HTML to editor")
     }
 
     // Restore previously disabled plugins
-    const extensions = editor.extensionManager.extensions;
+    const extensions = editor.extensionManager.extensions
     if (editor.storage.htmlView.disabledExtensions) {
       for (const extension of extensions) {
-        if (extension.name === "htmlView") continue;
+        if (extension.name === "htmlView") continue
 
         if (
           extension.options &&
           typeof extension.options.enable === "boolean" &&
           editor.storage.htmlView.disabledExtensions[extension.name] !==
-            undefined
+          undefined
         ) {
           extension.options.enable =
-            editor.storage.htmlView.disabledExtensions[extension.name];
+            editor.storage.htmlView.disabledExtensions[extension.name]
         }
       }
       // Clear stored state
-      editor.storage.htmlView.disabledExtensions = {};
+      editor.storage.htmlView.disabledExtensions = {}
     }
 
     // Update state
-    editor.storage.htmlView.isHtmlMode = false;
-    console.log("Switched back to rich text mode");
+    editor.storage.htmlView.isHtmlMode = false
+    console.log("Switched back to rich text mode")
   } catch (error) {
-    console.error("Error applying HTML:", error);
+    console.error("Error applying HTML:", error)
 
     // Remove overlay
     if (editor.storage.htmlView.overlayElement) {
-      editor.storage.htmlView.overlayElement.remove();
-      editor.storage.htmlView.overlayElement = null;
+      editor.storage.htmlView.overlayElement.remove()
+      editor.storage.htmlView.overlayElement = null
     }
 
-    editor.storage.htmlView.isHtmlMode = false;
+    editor.storage.htmlView.isHtmlMode = false
   }
 }
 
@@ -477,14 +477,14 @@ export const HtmlView = /* @__PURE__*/ Extension.create<HtmlViewOptions>({
       // Add storage for dimensions
       originalWidth: 0,
       originalHeight: 0,
-      originalScrollHeight: 0,
-    } as const;
+      originalScrollHeight: 0
+    } as const
   },
 
   // Add custom CSS for HTML view mode
   addGlobalAttributes() {
     // Add global CSS styles
-    const style = document.createElement("style");
+    const style = document.createElement("style")
     style.textContent = `
       .html-view-mode .ProseMirror {
         display: none !important;
@@ -533,10 +533,10 @@ export const HtmlView = /* @__PURE__*/ Extension.create<HtmlViewOptions>({
         position: relative !important;
         pointer-events: auto !important;
       }
-    `;
-    document.head.appendChild(style);
+    `
+    document.head.appendChild(style)
 
-    return [];
+    return []
   },
 
   addOptions() {
@@ -547,7 +547,7 @@ export const HtmlView = /* @__PURE__*/ Extension.create<HtmlViewOptions>({
       button: ({ editor, t, extension }) => {
         // 注册全局属性（在按钮配置时执行）
         if (extension.options.allowedAttributes) {
-          registerGlobalAllowedAttributes(extension.options.allowedAttributes);
+          registerGlobalAllowedAttributes(extension.options.allowedAttributes)
         }
 
         return {
@@ -555,34 +555,34 @@ export const HtmlView = /* @__PURE__*/ Extension.create<HtmlViewOptions>({
           componentProps: {
             action: () => {
               // debugger;
-              const isHtmlMode = editor.storage.htmlView.isHtmlMode;
+              const isHtmlMode = editor.storage.htmlView.isHtmlMode
 
               if (isHtmlMode) {
                 // Switch from HTML view to rich text view
-                deactivateHtmlMode(editor);
+                deactivateHtmlMode(editor)
               } else {
                 // Capture dimensions BEFORE activating HTML mode
-                const editorElement = editor.view.dom;
-                const editorParent = editorElement.parentElement;
+                const editorElement = editor.view.dom
+                const editorParent = editorElement.parentElement
 
                 if (editorParent) {
                   // Store original dimensions in storage
                   editor.storage.htmlView.originalWidth =
-                    editorParent.offsetWidth;
+                    editorParent.offsetWidth
                   editor.storage.htmlView.originalHeight =
-                    editorParent.offsetHeight;
+                    editorParent.offsetHeight
                   editor.storage.htmlView.originalScrollHeight =
-                    editorParent.scrollHeight;
+                    editorParent.scrollHeight
                   console.log(
                     "Captured original dimensions before HTML mode:",
                     editor.storage.htmlView.originalWidth,
                     editor.storage.htmlView.originalHeight,
-                    editor.storage.htmlView.originalScrollHeight,
-                  );
+                    editor.storage.htmlView.originalScrollHeight
+                  )
                 }
 
                 // Now switch to HTML view with stored dimensions
-                activateHtmlMode(editor);
+                activateHtmlMode(editor)
               }
             },
             isActive: () => editor.storage.htmlView.isHtmlMode || false,
@@ -594,57 +594,57 @@ export const HtmlView = /* @__PURE__*/ Extension.create<HtmlViewOptions>({
               const handler = (e: CustomEvent) => {
                 // Actively look for HTML button and ensure it's marked
                 const htmlButtons =
-                  document.querySelectorAll(".v-toolbar button");
+                  document.querySelectorAll(".v-toolbar button")
                 // Try to find HTML button through multiple selectors
                 htmlButtons.forEach((btn) => {
-                  const svg = btn.querySelector(".v-icon svg");
+                  const svg = btn.querySelector(".v-icon svg")
                   if (svg) {
-                    const path = svg.querySelector("path");
+                    const path = svg.querySelector("path")
                     if (
                       path &&
                       path
                         .getAttribute("d")
                         ?.includes(
-                          "M12,17.56L16.07,16.43L16.62,10.33H9.38L9.2,8.3H16.8L17,6.31H7L7.56,12.32H14.45L14.22,14.9L12,15.5L9.78,14.9L9.64,13.24H7.64L7.93,16.43L12,17.56M4.07,3H19.93L18.5,19.2L12,21L5.5,19.2L4.07,3Z",
+                          "M12,17.56L16.07,16.43L16.62,10.33H9.38L9.2,8.3H16.8L17,6.31H7L7.56,12.32H14.45L14.22,14.9L12,15.5L9.78,14.9L9.64,13.24H7.64L7.93,16.43L12,17.56M4.07,3H19.93L18.5,19.2L12,21L5.5,19.2L4.07,3Z"
                         )
                     ) {
                       // Found HTML button, set marker
-                      btn.setAttribute("data-htmlview-btn", "true");
+                      btn.setAttribute("data-htmlview-btn", "true")
                     }
                   }
-                });
+                })
 
                 // Get all toolbar buttons
                 const allButtons = document.querySelectorAll(
-                  ".vuetify-pro-tiptap .v-toolbar button",
-                );
+                  ".vuetify-pro-tiptap .v-toolbar button"
+                )
 
                 // Iterate through all buttons
                 allButtons.forEach((button) => {
                   // Check if it's the HTML button
-                  const isHtmlButton = button.hasAttribute("data-htmlview-btn");
+                  const isHtmlButton = button.hasAttribute("data-htmlview-btn")
 
                   if (e.detail.isHtmlMode) {
                     // HTML mode activated
                     if (!isHtmlButton) {
                       // Non-HTML buttons disabled - multiple mechanisms to ensure disabling
-                      button.setAttribute("disabled", "true");
+                      button.setAttribute("disabled", "true")
                       button.setAttribute("aria-disabled", "true");
                       (button as HTMLElement).style.pointerEvents = "none";
                       (button as HTMLElement).style.opacity = "0.4";
                       (button as HTMLElement).style.backgroundColor = "#f0f0f0";
-                      (button as HTMLElement).style.cursor = "not-allowed";
+                      (button as HTMLElement).style.cursor = "not-allowed"
                       // Safely add event prevention
                       if (button instanceof HTMLElement) {
                         button.onclick = function (event: Event) {
-                          event.preventDefault();
-                          event.stopPropagation();
-                          return false;
-                        };
+                          event.preventDefault()
+                          event.stopPropagation()
+                          return false
+                        }
                       }
                     } else {
                       // HTML button remains enabled
-                      button.removeAttribute("disabled");
+                      button.removeAttribute("disabled")
                       button.removeAttribute("aria-disabled");
                       (button as HTMLElement).style.pointerEvents = "auto";
                       (button as HTMLElement).style.opacity = "1";
@@ -654,11 +654,11 @@ export const HtmlView = /* @__PURE__*/ Extension.create<HtmlViewOptions>({
                         "1px solid rgba(25, 118, 210, 0.5)";
                       (button as HTMLElement).style.zIndex = "1000";
                       (button as HTMLElement).style.position = "relative";
-                      (button as HTMLElement).style.cursor = "pointer";
+                      (button as HTMLElement).style.cursor = "pointer"
                     }
                   } else {
                     // Normal mode, restore all buttons
-                    button.removeAttribute("disabled");
+                    button.removeAttribute("disabled")
                     button.removeAttribute("aria-disabled");
                     (button as HTMLElement).style.pointerEvents = "";
                     (button as HTMLElement).style.opacity = "";
@@ -666,53 +666,53 @@ export const HtmlView = /* @__PURE__*/ Extension.create<HtmlViewOptions>({
                     (button as HTMLElement).style.border = "";
                     (button as HTMLElement).style.position = "";
                     (button as HTMLElement).style.zIndex = "";
-                    (button as HTMLElement).style.cursor = "";
+                    (button as HTMLElement).style.cursor = ""
                     // Safely remove event prevention
                     if (button instanceof HTMLElement) {
-                      button.onclick = null;
+                      button.onclick = null
                     }
                   }
-                });
-              };
+                })
+              }
 
               document.addEventListener(
                 "tiptap-html-mode-changed",
-                handler as EventListener,
-              );
+                handler as EventListener
+              )
 
               // Mark current button as HTML view button to avoid it being disabled by itself
               return {
                 element: document.createElement("div"),
                 onMount: (element: HTMLElement) => {
                   // Find the closest button element and mark it
-                  const button = element.closest("button");
+                  const button = element.closest("button")
                   if (button) {
-                    button.setAttribute("data-htmlview-btn", "true");
-                    console.log("HTML view button has been marked");
+                    button.setAttribute("data-htmlview-btn", "true")
+                    console.log("HTML view button has been marked")
                   }
                 },
                 onDestroy: () => {
                   document.removeEventListener(
                     "tiptap-html-mode-changed",
-                    handler as EventListener,
-                  );
-                },
-              };
-            },
-          },
-        };
-      },
-    };
+                    handler as EventListener
+                  )
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
 
   // Cleanup function to ensure switching back to normal mode and removing any temporary elements
   onDestroy() {
-    const editor = this.editor;
+    const editor = this.editor
     if (editor.storage.htmlView.isHtmlMode) {
       // Remove HTML editor overlay
       if (editor.storage.htmlView.overlayElement) {
-        editor.storage.htmlView.overlayElement.remove();
-        editor.storage.htmlView.overlayElement = null;
+        editor.storage.htmlView.overlayElement.remove()
+        editor.storage.htmlView.overlayElement = null
       }
     }
   },
@@ -725,11 +725,11 @@ export const HtmlView = /* @__PURE__*/ Extension.create<HtmlViewOptions>({
         editor.storage.htmlView.isHtmlMode &&
         !editor.storage.htmlView.isUpdatingFromHTML
       ) {
-        return false;
+        return false
       }
 
       // Otherwise allow updates to propagate to v-model
-      return true;
-    };
-  },
-});
+      return true
+    }
+  }
+})
