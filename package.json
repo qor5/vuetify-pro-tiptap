@@ -146,5 +146,13 @@
     "vue-tsc": "2.1.6",
     "vuetify": "^3.7.5",
     "xss": "^1.0.15"
+  },
+  "pnpm": {
+    "overrides": {
+      "flat-cache@6": "6.1.14",
+      "cacheable@2": "2.0.1",
+      "@cacheable/memory@2": "2.0.1",
+      "@cacheable/utils@2": "2.0.1"
+    }
   }
 }
