@@ -1,16 +1,16 @@
-import type { GeneralOptions } from "@/type";
-import type { BoldOptions as TiptapImageOptions } from "@tiptap/extension-bold";
+import type { BoldOptions as TiptapImageOptions } from "@tiptap/extension-bold"
+import type { GeneralOptions } from "@/type"
 
-import { Bold as TiptapBold } from "@tiptap/extension-bold";
-import { addCommonAttributes } from "./attribute-config";
+import { Bold as TiptapBold } from "@tiptap/extension-bold"
+import { addCommonAttributes } from "./attribute-config"
 
-import ActionButton from "./components/ActionButton.vue";
+import ActionButton from "./components/ActionButton.vue"
 
 export interface BoldOptions
   extends TiptapImageOptions,
     GeneralOptions<BoldOptions> {
   /** HTML attributes that should be allowed on bold elements */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 export const Bold = /* @__PURE__*/ TiptapBold.extend<BoldOptions>({
@@ -18,8 +18,8 @@ export const Bold = /* @__PURE__*/ TiptapBold.extend<BoldOptions>({
     return addCommonAttributes(
       this.parent?.(),
       "bold",
-      this.options.allowedAttributes,
-    );
+      this.options.allowedAttributes
+    )
   },
 
   addOptions() {
@@ -32,9 +32,9 @@ export const Bold = /* @__PURE__*/ TiptapBold.extend<BoldOptions>({
           isActive: () => editor.isActive("bold") || false,
           disabled: !editor.can().toggleBold(),
           icon: "bold",
-          tooltip: t("editor.bold.tooltip"),
-        },
-      }),
-    };
-  },
-});
+          tooltip: t("editor.bold.tooltip")
+        }
+      })
+    }
+  }
+})

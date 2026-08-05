@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { getIcon } from '@/constants/icons'
-import { useTiptapStore } from '@/hooks'
-
-import { useLocale } from '@/locales'
-import { ButtonViewReturnComponentProps } from '@/type'
 import { useFullscreen } from '@vueuse/core'
 import { computed, unref, watch } from 'vue'
+
+import { getIcon } from '@/constants/icons'
+import { useTiptapStore } from '@/hooks'
+import { useLocale } from '@/locales'
+import { ButtonViewReturnComponentProps } from '@/type'
 
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,

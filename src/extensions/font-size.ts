@@ -1,10 +1,10 @@
-import type { GeneralOptions } from '@/type'
-
 import type { Item } from './components/ActionMenuButton.vue'
-import { DEFAULT_FONT_SIZE_LIST, DEFAULT_FONT_SIZE_VALUUE } from '@/constants/define'
 
-import { getCssUnitWithDefault } from '@/utils/utils'
+import type { GeneralOptions } from '@/type'
 import { Extension } from '@tiptap/core'
+
+import { DEFAULT_FONT_SIZE_LIST, DEFAULT_FONT_SIZE_VALUUE } from '@/constants/define'
+import { getCssUnitWithDefault } from '@/utils/utils'
 import ActionMenuButton from './components/ActionMenuButton.vue'
 
 /**

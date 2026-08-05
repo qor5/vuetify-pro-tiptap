@@ -1,11 +1,11 @@
-import type { MarkdownThemeProps } from '@/constants/define'
-
-import type { GeneralOptions } from '@/type'
 import type { Item } from './components/ActionMenuButton.vue'
 
+import type { MarkdownThemeProps } from '@/constants/define'
+import type { GeneralOptions } from '@/type'
+
+import { Extension } from '@tiptap/core'
 import { DEFAULT_MARKDOWN_THEME_LIST } from '@/constants/define'
 import { useContext } from '@/hooks'
-import { Extension } from '@tiptap/core'
 import ActionMenuButton from './components/ActionMenuButton.vue'
 
 /**

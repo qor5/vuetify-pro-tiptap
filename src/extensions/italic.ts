@@ -1,16 +1,16 @@
-import type { GeneralOptions } from "@/type";
-import type { ItalicOptions as TiptapItalicOptions } from "@tiptap/extension-italic";
+import type { ItalicOptions as TiptapItalicOptions } from "@tiptap/extension-italic"
+import type { GeneralOptions } from "@/type"
 
-import { Italic as TiptapItalic } from "@tiptap/extension-italic";
-import { addCommonAttributes } from "./attribute-config";
+import { Italic as TiptapItalic } from "@tiptap/extension-italic"
+import { addCommonAttributes } from "./attribute-config"
 
-import ActionButton from "./components/ActionButton.vue";
+import ActionButton from "./components/ActionButton.vue"
 
 export interface ItalicOptions
   extends TiptapItalicOptions,
     GeneralOptions<ItalicOptions> {
   /** HTML attributes that should be allowed on italic elements */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 export const Italic = /* @__PURE__*/ TiptapItalic.extend<ItalicOptions>({
@@ -18,8 +18,8 @@ export const Italic = /* @__PURE__*/ TiptapItalic.extend<ItalicOptions>({
     return addCommonAttributes(
       this.parent?.(),
       "italic",
-      this.options.allowedAttributes,
-    );
+      this.options.allowedAttributes
+    )
   },
 
   addOptions() {
@@ -32,9 +32,9 @@ export const Italic = /* @__PURE__*/ TiptapItalic.extend<ItalicOptions>({
           isActive: () => editor.isActive("italic") || false,
           disabled: !editor.can().toggleItalic(),
           icon: "italic",
-          tooltip: t("editor.italic.tooltip"),
-        },
-      }),
-    };
-  },
-});
+          tooltip: t("editor.italic.tooltip")
+        }
+      })
+    }
+  }
+})

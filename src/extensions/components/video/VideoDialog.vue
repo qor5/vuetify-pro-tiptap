@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { Editor } from '@tiptap/vue-3'
+import { computed, ref, unref, watchEffect } from 'vue'
 import { getIcon } from '@/constants/icons'
 import { useEval } from '@/hooks/use-eval'
 import { useLocale } from '@/locales'
-import { computed, ref, unref, watchEffect } from 'vue'
 
 interface Props {
   value?: string

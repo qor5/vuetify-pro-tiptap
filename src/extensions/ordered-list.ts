@@ -1,16 +1,16 @@
-import type { GeneralOptions } from "@/type";
-import type { OrderedListOptions as TiptapOrderedListOptions } from "@tiptap/extension-ordered-list";
+import type { OrderedListOptions as TiptapOrderedListOptions } from "@tiptap/extension-ordered-list"
+import type { GeneralOptions } from "@/type"
 
-import { OrderedList as TiptapOrderedList } from "@tiptap/extension-ordered-list";
-import { addCommonAttributes } from "./attribute-config";
+import { OrderedList as TiptapOrderedList } from "@tiptap/extension-ordered-list"
+import { addCommonAttributes } from "./attribute-config"
 
-import ActionButton from "./components/ActionButton.vue";
+import ActionButton from "./components/ActionButton.vue"
 
 export interface OrderedListOptions
   extends TiptapOrderedListOptions,
     GeneralOptions<OrderedListOptions> {
   /** HTML attributes that should be allowed on ordered list elements */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 export const OrderedList =
@@ -19,8 +19,8 @@ export const OrderedList =
       return addCommonAttributes(
         this.parent?.(),
         "orderedList",
-        this.options.allowedAttributes,
-      );
+        this.options.allowedAttributes
+      )
     },
 
     addOptions() {
@@ -33,9 +33,9 @@ export const OrderedList =
             isActive: () => editor.isActive("orderedList") || false,
             disabled: !editor.can().toggleOrderedList(),
             icon: "orderedList",
-            tooltip: t("editor.orderedlist.tooltip"),
-          },
-        }),
-      };
-    },
-  });
+            tooltip: t("editor.orderedlist.tooltip")
+          }
+        })
+      }
+    }
+  })

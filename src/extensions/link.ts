@@ -1,14 +1,14 @@
-import type { GeneralOptions } from "@/type";
-import type { LinkOptions as TiptapLinkOptions } from "@tiptap/extension-link";
-import type { EditorView } from "@tiptap/pm/view";
-import { getMarkRange } from "@tiptap/core";
-import { Link as TiptapLink } from "@tiptap/extension-link";
-import { Plugin, TextSelection } from "@tiptap/pm/state";
+import type { LinkOptions as TiptapLinkOptions } from "@tiptap/extension-link"
+import type { EditorView } from "@tiptap/pm/view"
+import type { GeneralOptions } from "@/type"
+import { getMarkRange } from "@tiptap/core"
+import { Link as TiptapLink } from "@tiptap/extension-link"
+import { Plugin, TextSelection } from "@tiptap/pm/state"
 
-import { addCommonAttributes } from "./attribute-config";
-import LinkDialog from "./components/link/LinkDialog.vue";
+import { addCommonAttributes } from "./attribute-config"
+import LinkDialog from "./components/link/LinkDialog.vue"
 
-import LinkActionButton from "./components/LinkActionButton.vue";
+import LinkActionButton from "./components/LinkActionButton.vue"
 
 /**
  * Represents the interface for link options, extending TiptapLinkOptions and GeneralOptions.
@@ -17,10 +17,10 @@ export interface LinkOptions
   extends TiptapLinkOptions,
     GeneralOptions<LinkOptions> {
   /** Component for the link dialog */
-  dialogComponent: any;
-  hrefRules: string;
+  dialogComponent: any
+  hrefRules: string
   /** HTML attributes that should be allowed on link elements */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 export const Link = /* @__PURE__*/ TiptapLink.extend<LinkOptions>({
@@ -28,8 +28,8 @@ export const Link = /* @__PURE__*/ TiptapLink.extend<LinkOptions>({
     return addCommonAttributes(
       this.parent?.(),
       "link",
-      this.options.allowedAttributes,
-    );
+      this.options.allowedAttributes
+    )
   },
 
   addOptions() {
@@ -40,7 +40,7 @@ export const Link = /* @__PURE__*/ TiptapLink.extend<LinkOptions>({
         '[value => !/^http:\\/\\//.test(value) || "URL should not start with http://"]',
       dialogComponent: () => LinkDialog,
       button: ({ editor, extension, t }) => {
-        const { dialogComponent, hrefRules } = extension.options;
+        const { dialogComponent, hrefRules } = extension.options
 
         return {
           component: LinkActionButton,
@@ -49,14 +49,14 @@ export const Link = /* @__PURE__*/ TiptapLink.extend<LinkOptions>({
             isActive: () => editor.isActive("link") || false,
             disabled: !editor.can().setLink({ href: "" }),
             icon: "link",
-            tooltip: t("editor.link.tooltip"),
+            tooltip: t("editor.link.tooltip")
           },
           componentSlots: {
-            dialog: dialogComponent(),
-          },
-        };
-      },
-    };
+            dialog: dialogComponent()
+          }
+        }
+      }
+    }
   },
 
   addProseMirrorPlugins() {
@@ -65,24 +65,24 @@ export const Link = /* @__PURE__*/ TiptapLink.extend<LinkOptions>({
       new Plugin({
         props: {
           handleClick(view: EditorView, pos: number) {
-            const { schema, doc, tr } = view.state;
+            const { schema, doc, tr } = view.state
 
-            const range = getMarkRange(doc.resolve(pos), schema.marks.link);
+            const range = getMarkRange(doc.resolve(pos), schema.marks.link)
 
-            if (!range) return false;
+            if (!range) return false
 
-            const $start = doc.resolve(range.from);
-            const $end = doc.resolve(range.to);
+            const $start = doc.resolve(range.from)
+            const $end = doc.resolve(range.to)
 
             const transaction = tr.setSelection(
-              new TextSelection($start, $end),
-            );
+              new TextSelection($start, $end)
+            )
 
-            view.dispatch(transaction);
-            return true;
-          },
-        },
-      }),
-    ];
-  },
-});
+            view.dispatch(transaction)
+            return true
+          }
+        }
+      })
+    ]
+  }
+})

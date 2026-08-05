@@ -1,16 +1,16 @@
-import type { GeneralOptions } from "@/type";
-import type { HighlightOptions as TiptapHighlightOptions } from "@tiptap/extension-highlight";
+import type { HighlightOptions as TiptapHighlightOptions } from "@tiptap/extension-highlight"
+import type { GeneralOptions } from "@/type"
 
-import { Highlight as TiptapHighlight } from "@tiptap/extension-highlight";
-import { addCommonAttributes } from "./attribute-config";
+import { Highlight as TiptapHighlight } from "@tiptap/extension-highlight"
+import { addCommonAttributes } from "./attribute-config"
 
-import HighlightActionButton from "./components/HighlightActionButton.vue";
+import HighlightActionButton from "./components/HighlightActionButton.vue"
 
 export interface HighlightOptions
   extends TiptapHighlightOptions,
     GeneralOptions<HighlightOptions> {
   /** HTML attributes that should be allowed on highlight elements */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 export const Highlight =
@@ -19,8 +19,8 @@ export const Highlight =
       return addCommonAttributes(
         this.parent?.(),
         "highlight",
-        this.options.allowedAttributes,
-      );
+        this.options.allowedAttributes
+      )
     },
 
     addOptions() {
@@ -32,14 +32,14 @@ export const Highlight =
           componentProps: {
             action: (color?: unknown) => {
               if (typeof color === "string")
-                editor.chain().focus().setHighlight({ color }).run();
+                editor.chain().focus().setHighlight({ color }).run()
             },
             isActive: () => editor.isActive("highlight") || false,
             disabled: !editor.can().setHighlight(),
             icon: "highlight",
-            tooltip: t("editor.highlight.tooltip"),
-          },
-        }),
-      };
-    },
-  });
+            tooltip: t("editor.highlight.tooltip")
+          }
+        })
+      }
+    }
+  })

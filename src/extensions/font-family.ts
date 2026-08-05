@@ -1,11 +1,11 @@
-import type { FontFamilyProps } from '@/constants/define'
-import type { GeneralOptions } from '@/type'
-
 import type { FontFamilyOptions as TiptapFontFamilyOptions } from '@tiptap/extension-font-family'
 import type { Item } from './components/ActionMenuButton.vue'
 
-import { DEFAULT_FONT_FAMILY_LIST, DEFAULT_FONT_FAMILY_VALUE } from '@/constants/define'
+import type { FontFamilyProps } from '@/constants/define'
+import type { GeneralOptions } from '@/type'
+
 import { FontFamily as TiptapFontFamily } from '@tiptap/extension-font-family'
+import { DEFAULT_FONT_FAMILY_LIST, DEFAULT_FONT_FAMILY_VALUE } from '@/constants/define'
 import ActionMenuButton from './components/ActionMenuButton.vue'
 
 /**
