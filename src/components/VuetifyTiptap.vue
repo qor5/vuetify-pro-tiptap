@@ -2,7 +2,7 @@
 import type { Editor as CoreEditor } from '@tiptap/core'
 import type { AnyExtension, EditorOptions } from '@tiptap/vue-3'
 import { Editor, EditorContent } from '@tiptap/vue-3'
-import { computed, onUnmounted, unref, useAttrs, watch } from 'vue'
+import { computed, onUnmounted, ref, unref, useAttrs, watch } from 'vue'
 import { useTheme } from 'vuetify'
 
 import { EDITOR_UPDATE_THROTTLE_WAIT_TIME, EDITOR_UPDATE_WATCH_THROTTLE_WAIT_TIME } from '@/constants/define'
@@ -45,6 +45,10 @@ interface Emits {
   (event: 'update:modelValue', value: Props['modelValue']): void
   (event: 'update:markdownTheme', value: string): void
 }
+
+defineOptions({
+  inheritAttrs: false
+})
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
@@ -96,6 +100,11 @@ const sortExtensions = computed<AnyExtension[]>(() => {
   return [...exts, ...diff].map((k, i) => k.configure({ sort: i }))
 })
 
+// Track the last value emitted by this component so onValueChange can
+// distinguish a parent echoing back our own update vs a genuine
+// external change that should overwrite the editor content.
+const lastEmittedValue = ref<Props['modelValue']>(props.modelValue)
+
 const editor = new Editor({
   content: props.modelValue,
   editorProps: {
@@ -112,6 +121,7 @@ const editor = new Editor({
   onUpdate: throttle<OnUpdate>(({ editor }) => {
     const output = getOutput(editor, props.output)
 
+    lastEmittedValue.value = output
     emit('update:modelValue', output)
 
     emit('change', { editor, output })
@@ -180,7 +190,10 @@ const onValueChange = throttle((val: NonNullable<Props['modelValue']>) => {
 
   const output = getOutput(editor, props.output)
 
-  if (isEqual(output, val)) return
+  // Skip if the editor already has this content, OR if the incoming value
+  // is just the parent echoing back what we emitted. Calling setContent
+  // would overwrite characters the user typed since the last emission.
+  if (isEqual(output, val) || isEqual(lastEmittedValue.value, val)) return
 
   const { from, to } = editor.state.selection
   editor.commands.setContent(val, { emitUpdate: false })
@@ -198,71 +211,73 @@ defineExpose({ editor })
 </script>
 
 <template>
-  <div v-if="editor" class="vuetify-pro-tiptap" :class="{ dense }">
-    <VThemeProvider :theme="isDark ? 'dark' : 'light'">
-      <!-- Edit Mode -->
-      <BubbleMenu v-if="!hideBubble" :editor="editor" :disabled="disableToolbar" />
+  <Teleport to="body" :disabled="!isFullscreen">
+    <div v-if="editor" class="vuetify-pro-tiptap" :class="{ dense }">
+      <VThemeProvider :theme="isDark ? 'dark' : 'light'">
+        <!-- Edit Mode -->
+        <BubbleMenu v-if="!hideBubble" :editor="editor" :disabled="disableToolbar" />
 
-      <VInput class="pt-0" hide-details="auto" :error-messages="errorMessages">
-        <VCard
-          :flat="flat"
-          :outlined="outlined"
-          :color="isDark ? 'grey-darken-4' : 'grey-lighten-4'"
-          v-bind="$attrs"
-          :style="{
-            borderColor: $attrs['error-messages'] ? '#ff5252' : undefined,
-            width: '100%'
-          }"
-          class="vuetify-pro-tiptap-editor"
-          :class="{ 'vuetify-pro-tiptap-editor--fullscreen': isFullscreen }"
-        >
-          <template v-if="label && !isFullscreen">
-            <VCardTitle :class="isDark ? 'bg-grey-darken-3' : 'bg-grey-lighten-3'">
-              {{ label }}
-            </VCardTitle>
-
-            <VDivider />
-          </template>
-          <!-- Toolbar -->
-          <TipTapToolbar
-            v-if="!hideToolbar"
-            class="vuetify-pro-tiptap-editor__toolbar"
-            :editor="editor"
-            :disabled="disableToolbar"
-          />
-
-          <slot
-            name="editor"
-            v-bind="{ editor, props: { class: 'vuetify-pro-tiptap-editor__content', 'data-testid': 'value' } }"
+        <VInput class="pt-0" hide-details="auto" :error-messages="errorMessages">
+          <VCard
+            :flat="flat"
+            :outlined="outlined"
+            :color="isDark ? 'grey-darken-4' : 'grey-lighten-4'"
+            v-bind="$attrs"
+            :style="{
+              borderColor: $attrs['error-messages'] ? '#ff5252' : undefined,
+              width: '100%'
+            }"
+            class="vuetify-pro-tiptap-editor"
+            :class="{ 'vuetify-pro-tiptap-editor--fullscreen': isFullscreen }"
           >
-            <EditorContent
-              class="vuetify-pro-tiptap-editor__content"
-              :class="contentDynamicClasses"
-              :style="contentDynamicStyles"
+            <template v-if="label && !isFullscreen">
+              <VCardTitle :class="isDark ? 'bg-grey-darken-3' : 'bg-grey-lighten-3'">
+                {{ label }}
+              </VCardTitle>
+
+              <VDivider />
+            </template>
+            <!-- Toolbar -->
+            <TipTapToolbar
+              v-if="!hideToolbar"
+              class="vuetify-pro-tiptap-editor__toolbar"
               :editor="editor"
-              data-testid="value"
+              :disabled="disableToolbar"
             />
-          </slot>
 
-          <slot name="bottom" v-bind="{ editor }">
-            <VToolbar class="px-4" density="compact" flat>
-              <VSpacer />
+            <slot
+              name="editor"
+              v-bind="{ editor, props: { class: 'vuetify-pro-tiptap-editor__content', 'data-testid': 'value' } }"
+            >
+              <EditorContent
+                class="vuetify-pro-tiptap-editor__content"
+                :class="contentDynamicClasses"
+                :style="contentDynamicStyles"
+                :editor="editor"
+                data-testid="value"
+              />
+            </slot>
 
-              <template v-if="hasExtension(editor, 'characterCount')">
-                <span class="text-overline me-4">
-                  {{ editor.storage.characterCount.words() }} {{ t('editor.words') }}
-                </span>
+            <slot name="bottom" v-bind="{ editor }">
+              <VToolbar class="px-4" density="compact" flat>
+                <VSpacer />
 
-                <span class="text-overline">
-                  {{ editor.storage.characterCount.characters() }} {{ t('editor.characters') }}
-                </span>
-              </template>
-            </VToolbar>
-          </slot>
-        </VCard>
-      </VInput>
-    </VThemeProvider>
-  </div>
+                <template v-if="hasExtension(editor, 'characterCount')">
+                  <span class="text-overline me-4">
+                    {{ editor.storage.characterCount.words() }} {{ t('editor.words') }}
+                  </span>
+
+                  <span class="text-overline">
+                    {{ editor.storage.characterCount.characters() }} {{ t('editor.characters') }}
+                  </span>
+                </template>
+              </VToolbar>
+            </slot>
+          </VCard>
+        </VInput>
+      </VThemeProvider>
+    </div>
+  </Teleport>
 </template>
 
 <style lang="scss">

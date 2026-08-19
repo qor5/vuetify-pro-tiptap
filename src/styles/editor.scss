@@ -20,6 +20,10 @@ $extra-light-primary-color: #ecf5ff;
       height: 100% !important;
       margin: 0 !important;
       border-radius: 0 !important;
+
+      .tiptap.ProseMirror {
+        height: 100%;
+      }
     }
 
     &__menu-bubble {
