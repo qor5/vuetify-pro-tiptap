@@ -68,7 +68,7 @@ function isLinkSelection() {
 </script>
 
 <template>
-  <BubbleMenu v-show="items.length > 0" :editor="editor">
+  <BubbleMenu v-show="items.length > 0" class="vuetify-pro-tiptap-bubble-menu" :editor="editor">
     <VCard class="vuetify-pro-tiptap-editor__menu-bubble">
       <VCardText class="d-flex pa-0">
         <VToolbar density="compact" flat height="auto" class="py-1 ps-1">
