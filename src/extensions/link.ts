@@ -34,7 +34,7 @@ export const Link = /* @__PURE__*/ TiptapLink.extend<LinkOptions>({
 
   addOptions() {
     return {
-      ...this.parent?.(),
+      ...(this.parent?.() as TiptapLinkOptions),
       openOnClick: false,
       hrefRules:
         '[value => !/^http:\\/\\//.test(value) || "URL should not start with http://"]',

@@ -24,7 +24,7 @@ export interface TextAlignOptions extends TiptapTextAlignOptions, GeneralOptions
 export const TextAlign = /* @__PURE__*/ TiptapTextAlign.extend<TextAlignOptions>({
   addOptions() {
     return {
-      ...this.parent?.(),
+      ...(this.parent?.() as TextAlignOptions),
       types: ['heading', 'paragraph', 'image'],
       button: ({ editor, extension, t }) => {
         const alignments = (extension.options?.alignments as Alignments[]) || []

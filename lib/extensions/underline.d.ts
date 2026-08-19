@@ -1,5 +1,5 @@
-import { GeneralOptions } from '../type';
 import { UnderlineOptions as TiptapUnderlineOptions } from '@tiptap/extension-underline';
+import { GeneralOptions } from '../type';
 export interface UnderlineOptions extends TiptapUnderlineOptions, GeneralOptions<UnderlineOptions> {
     /** HTML attributes that should be allowed on underline elements */
     allowedAttributes?: string[];

@@ -20,9 +20,9 @@ export type ExtensionNameKeys = "bold" | "italic" | "underline" | "strike" | "co
  */
 export interface GeneralOptions<T> {
     /** Enabled divider */
-    divider: boolean;
+    divider?: boolean;
     /** Enabled spacer */
-    spacer: boolean;
+    spacer?: boolean;
     /** Button view function */
     button: ButtonView<T>;
 }

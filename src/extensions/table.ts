@@ -39,7 +39,7 @@ export const Table = /* @__PURE__*/ TiptapTable.extend<TableOptions>({
 
   addOptions() {
     return {
-      ...this.parent?.(),
+      ...(this.parent?.() as TableOptions),
       HTMLAttributes: {
         class: "table-wrapper"
       },

@@ -96,7 +96,9 @@ function onImageLoad(e: Record<string, any>) {
 // https://github.com/scrumpy/tiptap/issues/361#issuecomment-540299541
 function selectImage() {
   const { editor, getPos } = props
-  editor.commands.setNodeSelection(getPos())
+  const pos = getPos()
+  if (pos === undefined) return
+  editor.commands.setNodeSelection(pos)
 }
 
 /* invoked when window or editor resize */

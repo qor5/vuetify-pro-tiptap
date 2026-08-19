@@ -24,7 +24,7 @@ export const Strike = /* @__PURE__*/ TiptapStrike.extend<StrikeOptions>({
 
   addOptions() {
     return {
-      ...this.parent?.(),
+      ...(this.parent?.() as TiptapStrikeOptions),
       button: ({ editor, t }) => ({
         component: ActionButton,
         componentProps: {

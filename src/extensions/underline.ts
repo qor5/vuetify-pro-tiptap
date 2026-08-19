@@ -25,7 +25,7 @@ export const Underline =
 
     addOptions() {
       return {
-        ...this.parent?.(),
+        ...(this.parent?.() as TiptapUnderlineOptions),
         button: ({ editor, t }) => ({
           component: ActionButton,
           componentProps: {

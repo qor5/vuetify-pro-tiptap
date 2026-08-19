@@ -5,8 +5,8 @@ import type { BaseKitOptions } from '@/extensions/base-kit'
 import type { BubbleTypeMenu, NodeTypeKey } from '@/extensions/components/bubble'
 import { TextSelection } from '@tiptap/pm/state'
 
-import { BubbleMenu } from '@tiptap/vue-3'
-import { computed, reactive, unref } from 'vue'
+import { BubbleMenu } from '@tiptap/vue-3/menus'
+import { computed, unref } from 'vue'
 import { useLocale } from '@/locales'
 
 interface Props {
@@ -19,12 +19,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const { t } = useLocale()
-
-const tippyOptions = reactive<Record<string, unknown>>({
-  maxWidth: 'auto',
-  zIndex: 20,
-  appendTo: 'parent'
-})
 
 const nodeType = computed<NodeTypeKey | undefined>(() => {
   const selection = props.editor.state.selection as NodeSelection
@@ -74,7 +68,7 @@ function isLinkSelection() {
 </script>
 
 <template>
-  <BubbleMenu v-show="items.length > 0" :editor="editor" :tippy-options="tippyOptions">
+  <BubbleMenu v-show="items.length > 0" :editor="editor">
     <VCard class="vuetify-pro-tiptap-editor__menu-bubble">
       <VCardText class="d-flex pa-0">
         <VToolbar density="compact" flat height="auto" class="py-1 ps-1">

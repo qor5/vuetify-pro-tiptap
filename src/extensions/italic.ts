@@ -24,7 +24,7 @@ export const Italic = /* @__PURE__*/ TiptapItalic.extend<ItalicOptions>({
 
   addOptions() {
     return {
-      ...this.parent?.(),
+      ...(this.parent?.() as TiptapItalicOptions),
       button: ({ editor, t }) => ({
         component: ActionButton,
         componentProps: {

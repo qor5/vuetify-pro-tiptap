@@ -25,7 +25,7 @@ export const CodeBlock =
 
     addOptions() {
       return {
-        ...this.parent?.(),
+        ...(this.parent?.() as TiptapCodeBlockOptions),
         button: ({ editor, t }) => ({
           component: ActionButton,
           componentProps: {

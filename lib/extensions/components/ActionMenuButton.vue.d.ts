@@ -1,6 +1,6 @@
-import { ButtonViewReturnComponentProps } from '../../type';
 import { Editor } from '@tiptap/vue-3';
 import { StyleValue } from 'vue';
+import { ButtonViewReturnComponentProps } from '../../type';
 import { IconsOptions } from '../../constants/icons';
 export interface Item {
     title: string;

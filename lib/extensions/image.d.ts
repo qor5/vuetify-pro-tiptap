@@ -1,6 +1,6 @@
-import { GeneralOptions } from '../type';
 import { ImageOptions as TiptapImageOptions } from '@tiptap/extension-image';
 import { Display, ImageAttrsOptions, ImageTab, ImageTabKey } from './components/image/types';
+import { GeneralOptions } from '../type';
 /**
  * Represents the type for the upload function, which takes a File parameter and returns a Promise of type string.
  */
@@ -45,5 +45,5 @@ declare module "@tiptap/core" {
         };
     }
 }
-export declare const Image: import('@tiptap/vue-3').Node<ImageOptions, any>;
+export declare const Image: import('@tiptap/core').Node<ImageOptions, any>;
 export {};

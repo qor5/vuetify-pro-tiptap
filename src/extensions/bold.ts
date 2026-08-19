@@ -24,7 +24,7 @@ export const Bold = /* @__PURE__*/ TiptapBold.extend<BoldOptions>({
 
   addOptions() {
     return {
-      ...this.parent?.(),
+      ...(this.parent?.() as TiptapImageOptions),
       button: ({ editor, t }) => ({
         component: ActionButton,
         componentProps: {
