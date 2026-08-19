@@ -3,6 +3,13 @@ $border-color: #dcdfe6;
 $primary-color: #409eff;
 $extra-light-primary-color: #ecf5ff;
 
+// The floating bubble-menu wrapper rendered by @tiptap/vue-3/menus sets no
+// z-index of its own; keep the z-index the fork used with tippy (v2) so the
+// bubble stays above editor content but below Vuetify overlays (~2000+).
+.vuetify-pro-tiptap-bubble-menu {
+  z-index: 20;
+}
+
 .vuetify-pro-tiptap {
   overflow-wrap: anywhere;
 
@@ -20,6 +27,10 @@ $extra-light-primary-color: #ecf5ff;
       height: 100% !important;
       margin: 0 !important;
       border-radius: 0 !important;
+
+      .tiptap.ProseMirror {
+        height: 100%;
+      }
     }
 
     &__menu-bubble {

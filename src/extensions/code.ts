@@ -24,7 +24,7 @@ export const Code = /* @__PURE__*/ TiptapCode.extend<CodeOptions>({
 
   addOptions() {
     return {
-      ...this.parent?.(),
+      ...(this.parent?.() as TiptapCodeOptions),
       button: ({ editor, t }) => ({
         component: ActionButton,
         componentProps: {

@@ -25,7 +25,7 @@ export const BulletList =
 
     addOptions() {
       return {
-        ...this.parent?.(),
+        ...(this.parent?.() as TiptapBulletListOptions),
         button: ({ editor, t }) => ({
           component: ActionButton,
           componentProps: {

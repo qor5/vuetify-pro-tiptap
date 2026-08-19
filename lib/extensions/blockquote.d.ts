@@ -1,5 +1,5 @@
-import { GeneralOptions } from '../type';
 import { BlockquoteOptions as TiptapBlockquoteOptions } from '@tiptap/extension-blockquote';
+import { GeneralOptions } from '../type';
 export interface BlockquoteOptions extends TiptapBlockquoteOptions, GeneralOptions<BlockquoteOptions> {
     /** HTML attributes that should be allowed on blockquote elements */
     allowedAttributes?: string[];

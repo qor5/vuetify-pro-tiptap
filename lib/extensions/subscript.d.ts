@@ -1,6 +1,6 @@
-import { GeneralOptions } from '../type';
 import { SubscriptExtensionOptions as TiptapSubscriptOptions } from '@tiptap/extension-subscript';
 import { SuperscriptExtensionOptions as TiptapSuperscriptOptions } from '@tiptap/extension-superscript';
+import { GeneralOptions } from '../type';
 import { Extension } from '@tiptap/core';
 /**
  * Represents the interface for subscript and superscript options, extending GeneralOptions.

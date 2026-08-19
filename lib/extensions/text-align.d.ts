@@ -1,5 +1,5 @@
-import { GeneralOptions } from '../type';
 import { TextAlignOptions as TiptapTextAlignOptions } from '@tiptap/extension-text-align';
+import { GeneralOptions } from '../type';
 /** Represents the type for text alignments */
 type Alignments = 'left' | 'center' | 'right' | 'justify';
 /**

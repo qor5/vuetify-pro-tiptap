@@ -25,7 +25,7 @@ export const OrderedList =
 
     addOptions() {
       return {
-        ...this.parent?.(),
+        ...(this.parent?.() as TiptapOrderedListOptions),
         button: ({ editor, t }) => ({
           component: ActionButton,
           componentProps: {

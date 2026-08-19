@@ -10,7 +10,7 @@ export interface HistoryOptions extends TiptapHistoryOptions, GeneralOptions<His
 export const History = /* @__PURE__*/ TiptapHistory.extend<HistoryOptions>({
   addOptions() {
     return {
-      ...this.parent?.(),
+      ...(this.parent?.() as TiptapHistoryOptions),
       depth: 10,
       button: ({ editor, t }) => {
         const historys: ['undo', 'redo'] = ['undo', 'redo']

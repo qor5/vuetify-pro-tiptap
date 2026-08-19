@@ -9,6 +9,24 @@ export interface HtmlViewOptions extends GeneralOptions<HtmlViewOptions> {
   allowedAttributes?: string[]
 }
 
+export interface HtmlViewStorage {
+  isHtmlMode: boolean
+  editorContent: string
+  htmlContent: string
+  overlayElement: HTMLElement | null
+  isUpdatingFromHTML: boolean
+  disabledExtensions: Record<string, boolean>
+  originalWidth: number
+  originalHeight: number
+  originalScrollHeight: number
+}
+
+declare module "@tiptap/core" {
+  interface Storage {
+    htmlView: HtmlViewStorage
+  }
+}
+
 // Helper functions outside the extension
 function createOverlay(editor: Editor) {
   // Get editor DOM element
@@ -109,7 +127,7 @@ function createOverlay(editor: Editor) {
       const parsedHtml = parseHtml(textarea.value)
 
       // Use commands API to update editor content
-      editor.commands.setContent(parsedHtml, false)
+      editor.commands.setContent(parsedHtml, { emitUpdate: false })
 
       // Ensure editor state updates and triggers v-model update
       // This is key: manually trigger update event to ensure v-model syncs correctly
@@ -122,7 +140,8 @@ function createOverlay(editor: Editor) {
       if (editor.options.onUpdate) {
         editor.options.onUpdate({
           editor,
-          transaction: tr
+          transaction: tr,
+          appendedTransactions: []
         })
       }
     } catch (error) {
@@ -414,7 +433,8 @@ function deactivateHtmlMode(editor: Editor) {
       if (editor.options.onUpdate) {
         editor.options.onUpdate({
           editor,
-          transaction: tr
+          transaction: tr,
+          appendedTransactions: []
         })
       }
 
@@ -462,7 +482,10 @@ function deactivateHtmlMode(editor: Editor) {
   }
 }
 
-export const HtmlView = /* @__PURE__*/ Extension.create<HtmlViewOptions>({
+export const HtmlView = /* @__PURE__*/ Extension.create<
+  HtmlViewOptions,
+  HtmlViewStorage
+>({
   name: "htmlView",
 
   // Store the HTML view state
@@ -471,14 +494,14 @@ export const HtmlView = /* @__PURE__*/ Extension.create<HtmlViewOptions>({
       isHtmlMode: false,
       editorContent: "",
       htmlContent: "",
-      overlayElement: null as HTMLElement | null,
+      overlayElement: null,
       isUpdatingFromHTML: false,
-      disabledExtensions: {} as Record<string, boolean>,
+      disabledExtensions: {},
       // Add storage for dimensions
       originalWidth: 0,
       originalHeight: 0,
       originalScrollHeight: 0
-    } as const
+    }
   },
 
   // Add custom CSS for HTML view mode

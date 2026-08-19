@@ -1,5 +1,5 @@
-import { GeneralOptions } from '../type';
 import { HighlightOptions as TiptapHighlightOptions } from '@tiptap/extension-highlight';
+import { GeneralOptions } from '../type';
 export interface HighlightOptions extends TiptapHighlightOptions, GeneralOptions<HighlightOptions> {
     /** HTML attributes that should be allowed on highlight elements */
     allowedAttributes?: string[];

@@ -31,7 +31,7 @@ export const TaskList = /* @__PURE__*/ TiptapTaskList.extend<TaskListOptions>({
 
   addOptions() {
     return {
-      ...this.parent?.(),
+      ...(this.parent?.() as TiptapTaskListOptions),
       HTMLAttributes: {
         class: "task-list"
       },

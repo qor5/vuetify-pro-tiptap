@@ -1,5 +1,5 @@
-import { ButtonViewParams, ButtonViewReturn, ExtensionNameKeys } from '../../type';
 import { Editor } from '@tiptap/vue-3';
+import { ButtonViewParams, ButtonViewReturn, ExtensionNameKeys } from '../../type';
 /** Represents the floating types for bubble images */
 type BubbleImageFloatType = 'float-left' | 'float-none' | 'float-right';
 /** Represents the size types for bubble images or videos */
