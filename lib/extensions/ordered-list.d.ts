@@ -1,5 +1,5 @@
-import { GeneralOptions } from '../type';
 import { OrderedListOptions as TiptapOrderedListOptions } from '@tiptap/extension-ordered-list';
+import { GeneralOptions } from '../type';
 export interface OrderedListOptions extends TiptapOrderedListOptions, GeneralOptions<OrderedListOptions> {
     /** HTML attributes that should be allowed on ordered list elements */
     allowedAttributes?: string[];

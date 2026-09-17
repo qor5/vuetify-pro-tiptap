@@ -1,5 +1,5 @@
-import { GeneralOptions } from '../type';
 import { LinkOptions as TiptapLinkOptions } from '@tiptap/extension-link';
+import { GeneralOptions } from '../type';
 /**
  * Represents the interface for link options, extending TiptapLinkOptions and GeneralOptions.
  */

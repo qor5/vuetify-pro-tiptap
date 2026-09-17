@@ -1,6 +1,6 @@
-import { IconsOptions } from '../../constants/icons';
 import { Editor } from '@tiptap/vue-3';
 import { ImageTab, ImageTabKey } from './image/types';
+import { IconsOptions } from '../../constants/icons';
 import { ButtonViewReturnComponentProps } from '../../type';
 interface Props {
     editor: Editor;
@@ -60,12 +60,12 @@ declare const __VLS_component: import('vue').DefineComponent<import('vue').Extra
     action: undefined;
     isActive: undefined;
 }>>> & Readonly<{}>, {
+    upload: (file: File) => Promise<string>;
     color: string;
     action: (value?: unknown) => void;
     isActive: () => boolean;
     icon: keyof IconsOptions;
     tooltip: string;
-    upload: (file: File) => Promise<string>;
     disabled: boolean;
     imageTabs: ImageTab[];
     hiddenTabs: ImageTabKey[];

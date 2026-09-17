@@ -79,7 +79,7 @@ const locale: Record<string, string> = {
   "editor.undo.tooltip": "Undo",
   "editor.redo.tooltip": "Redo",
   "editor.fullscreen.tooltip.fullscreen": "Fullscreen",
-  "editor.fullscreen.tooltip.exit": "Fullscreen Exit",
-};
+  "editor.fullscreen.tooltip.exit": "Fullscreen Exit"
+}
 
-export default locale;
+export default locale

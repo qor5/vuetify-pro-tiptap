@@ -1,7 +1,7 @@
-import type { ButtonViewReturn, GeneralOptions } from '@/type'
 import type { Extensions } from '@tiptap/core'
 import type { SubscriptExtensionOptions as TiptapSubscriptOptions } from '@tiptap/extension-subscript'
 import type { SuperscriptExtensionOptions as TiptapSuperscriptOptions } from '@tiptap/extension-superscript'
+import type { ButtonViewReturn, GeneralOptions } from '@/type'
 import { Extension } from '@tiptap/core'
 import { Subscript as TiptapSubscript } from '@tiptap/extension-subscript'
 
@@ -32,7 +32,7 @@ export const SubAndSuperScript = /* @__PURE__*/ Extension.create<SubAndSuperScri
 
   addOptions() {
     return {
-      ...this.parent?.(),
+      ...(this.parent?.() as SubAndSuperScriptOptions),
       button: ({ editor, extension, t }) => {
         const subscript = extension.options.subscript
         const superscript = extension.options.superscript

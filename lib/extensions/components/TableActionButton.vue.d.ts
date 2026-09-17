@@ -1,5 +1,5 @@
-import { IconsOptions } from '../../constants/icons';
 import { Editor } from '@tiptap/vue-3';
+import { IconsOptions } from '../../constants/icons';
 import { ButtonViewReturnComponentProps } from '../../type';
 interface Props {
     editor: Editor;

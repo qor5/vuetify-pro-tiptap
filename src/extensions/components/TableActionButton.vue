@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { IconsOptions } from '@/constants/icons'
-
 import type { Editor } from '@tiptap/vue-3'
+
+import type { IconsOptions } from '@/constants/icons'
 import { ButtonViewReturnComponentProps } from '@/type'
 
 import ActionButton from './ActionButton.vue'

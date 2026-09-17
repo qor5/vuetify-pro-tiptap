@@ -2,6 +2,17 @@
 
 A WYSIWYG rich-text editor using [tiptap](https://github.com/scrumpy/tiptap) and [vuetify](https://github.com/vuetifyjs/vuetify) for Vue.js
 
+> [!IMPORTANT]
+> **This is the QOR5 fork — intentionally divergent from upstream.**
+>
+> Upstream [yikoyu/vuetify-pro-tiptap](https://github.com/yikoyu/vuetify-pro-tiptap) v3.0.0+ requires **Vuetify 4**. QOR5 products depend on Vuetify **3.x** UI customizations, so this fork stays on Vuetify 3 permanently and must NOT be synced wholesale with upstream. tiptap here is **v3 (^3.30.2+, security floor 3.27.0** — Aikido CVEs AIKIDO-2026-484358 / AIKIDO-2026-801631**)** — never downgrade below that.
+>
+> **QOR5-specific features not in upstream:** `HtmlView` (HTML source mode) with `allowedAttributes` inheritance (`attribute-config.ts`), enhanced `Video` (bilibili links, load-error handling, `VideoNodeView`), `useEval`-based `hrefRules` link validation, dimension-preserving HTML mode.
+>
+> **Syncing policy:** cherry-pick individual upstream fixes only (skip anything touching Vuetify 4, the post-v3 directory restructure, or cosmetic style changes). Upstream fixes ported so far: `047aef7` (v-model circular feedback), `1235070` (fullscreen teleport, minus the background-color change), `3e23bbe` (xss sub/sup whitelist), `7a4b039` (font-size parsing). Verified not applicable: `0d6401c`, `566ce6c`.
+>
+> The committed `lib/` directory is the build output consumed by [qor5/x](https://github.com/qor5/x) as a git dependency — run `pnpm build:lib` and commit `lib/` with every source change. tiptap is **bundled into** `lib/`, so dependency upgrades only take effect after a rebuild.
+
 [![download](https://img.shields.io/npm/dm/vuetify-pro-tiptap.svg)](https://npmcharts.com/compare/vuetify-pro-tiptap?minimal=true)
 [![version](https://img.shields.io/npm/v/vuetify-pro-tiptap.svg)](https://www.npmjs.org/package/vuetify-pro-tiptap)
 [![gzip](https://img.badgesize.io/https://unpkg.com/vuetify-pro-tiptap/lib/vuetify-pro-tiptap.js?compression=gzip&label=gzip)](https://img.badgesize.io/https://unpkg.com/vuetify-pro-tiptap/lib/vuetify-pro-tiptap.js?compression=gzip&label=gzip)

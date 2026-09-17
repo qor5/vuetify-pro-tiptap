@@ -2,8 +2,8 @@
   <div
     style="
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       width: 20.81px;
       height: 20.81px;
     "
@@ -18,7 +18,7 @@
       <defs>
         <style>
           .cls-1 {
-            fill: none;
+          fill: none;
           }
         </style>
       </defs>

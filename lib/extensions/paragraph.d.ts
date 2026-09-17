@@ -1,5 +1,5 @@
-import { GeneralOptions } from '../type';
 import { ParagraphOptions as TiptapParagraphOptions } from '@tiptap/extension-paragraph';
+import { GeneralOptions } from '../type';
 export interface ParagraphOptions extends TiptapParagraphOptions, GeneralOptions<ParagraphOptions> {
     /** HTML attributes that should be allowed on paragraph elements */
     allowedAttributes?: string[];

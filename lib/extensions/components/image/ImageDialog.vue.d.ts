@@ -23,9 +23,9 @@ declare const _default: import('vue').DefineComponent<import('vue').ExtractPropT
 }>>> & Readonly<{}>, {
     upload: (file: File) => Promise<string>;
     value: ImageAttrsOptions;
+    destroy: () => void;
     imageTabs: ImageTab[];
     hiddenTabs: ImageTabKey[];
-    destroy: () => void;
 }, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
 export default _default;
 type __VLS_WithDefaults<P, D> = {

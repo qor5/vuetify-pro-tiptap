@@ -1,27 +1,27 @@
-import type { ExtensionAttribute } from "@tiptap/core";
+import type { ExtensionAttribute } from "@tiptap/core"
 
 export interface AttributeConfigOptions {
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 /**
  * 全局属性注册中心
  */
 class AttributeRegistry {
-  private globalAttributes: string[] = ["class", "style", "id", "data-*"]; // 默认属性
-  private isInitialized = false;
+  private globalAttributes: string[] = ["class", "style", "id", "data-*"] // 默认属性
+  private isInitialized = false
 
   /**
    * 注册全局允许的属性（通常由 HtmlView 扩展调用）
    */
   registerGlobalAttributes(attributes: string[]): void {
     if (attributes && attributes.length > 0) {
-      this.globalAttributes = [...attributes];
-      this.isInitialized = true;
+      this.globalAttributes = [...attributes]
+      this.isInitialized = true
       console.log(
         "Global allowedAttributes registered:",
-        this.globalAttributes,
-      );
+        this.globalAttributes
+      )
     }
   }
 
@@ -29,47 +29,47 @@ class AttributeRegistry {
    * 获取全局允许的属性
    */
   getGlobalAttributes(): string[] {
-    return [...this.globalAttributes];
+    return [...this.globalAttributes]
   }
 
   /**
    * 检查是否已初始化
    */
   isGlobalInitialized(): boolean {
-    return this.isInitialized;
+    return this.isInitialized
   }
 
   /**
    * 重置注册表（用于测试）
    */
   reset(): void {
-    this.globalAttributes = ["class", "style", "id"];
-    this.isInitialized = false;
+    this.globalAttributes = ["class", "style", "id"]
+    this.isInitialized = false
   }
 }
 
 // 创建全局单例
-const attributeRegistry = new AttributeRegistry();
+const attributeRegistry = new AttributeRegistry()
 
 /**
  * 注册全局允许的属性（由 HtmlView 扩展调用）
  */
 export function registerGlobalAllowedAttributes(attributes: string[]): void {
-  attributeRegistry.registerGlobalAttributes(attributes);
+  attributeRegistry.registerGlobalAttributes(attributes)
 }
 
 /**
  * 获取全局允许的属性
  */
 export function getGlobalAllowedAttributes(): string[] {
-  return attributeRegistry.getGlobalAttributes();
+  return attributeRegistry.getGlobalAttributes()
 }
 
 /**
  * 检查全局属性是否已初始化
  */
 export function isGlobalAttributesInitialized(): boolean {
-  return attributeRegistry.isGlobalInitialized();
+  return attributeRegistry.isGlobalInitialized()
 }
 
 /**
@@ -84,28 +84,28 @@ export function isGlobalAttributesInitialized(): boolean {
 export function addCommonAttributes(
   parent: any,
   extensionName: string,
-  localAttributes?: string[],
+  localAttributes?: string[]
 ): Record<string, ExtensionAttribute> {
   // 优先级：本地配置 > 全局配置 > 默认配置
-  let attributesToAdd: string[];
+  let attributesToAdd: string[]
 
   if (localAttributes && localAttributes.length > 0) {
     // 使用本地配置
-    attributesToAdd = localAttributes;
+    attributesToAdd = localAttributes
   } else {
     // 使用全局配置
-    attributesToAdd = getGlobalAllowedAttributes();
+    attributesToAdd = getGlobalAllowedAttributes()
   }
 
   console.log(`Adding common attributes to ${extensionName}:`, {
     local: localAttributes,
     global: getGlobalAllowedAttributes(),
     final: attributesToAdd,
-    globalInitialized: isGlobalAttributesInitialized(),
-  });
+    globalInitialized: isGlobalAttributesInitialized()
+  })
 
   // Start with parent attributes
-  const attributes = parent ? { ...parent } : {};
+  const attributes = parent ? { ...parent } : {}
 
   // Add each allowed attribute if it doesn't already exist
   attributesToAdd.forEach((attr) => {
@@ -113,17 +113,17 @@ export function addCommonAttributes(
       attributes[attr] = {
         default: null,
         parseHTML: (element: HTMLElement) => {
-          return element.getAttribute(attr) || null;
+          return element.getAttribute(attr) || null
         },
         renderHTML: (attrs: Record<string, any>) => {
-          if (!attrs[attr]) return {};
-          return { [attr]: attrs[attr] };
-        },
-      };
+          if (!attrs[attr]) return {}
+          return { [attr]: attrs[attr] }
+        }
+      }
     }
-  });
+  })
 
-  return attributes;
+  return attributes
 }
 
 /**
@@ -132,12 +132,12 @@ export function addCommonAttributes(
  */
 export function createAttributesFunction(
   extensionName: string,
-  localAttributes?: string[],
+  localAttributes?: string[]
 ) {
   return function (this: any) {
-    return addCommonAttributes(this.parent?.(), extensionName, localAttributes);
-  };
+    return addCommonAttributes(this.parent?.(), extensionName, localAttributes)
+  }
 }
 
 // 导出注册表实例（用于调试）
-export { attributeRegistry };
+export { attributeRegistry }

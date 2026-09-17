@@ -1,6 +1,6 @@
+import { FontFamilyOptions as TiptapFontFamilyOptions } from '@tiptap/extension-font-family';
 import { FontFamilyProps } from '../constants/define';
 import { GeneralOptions } from '../type';
-import { FontFamilyOptions as TiptapFontFamilyOptions } from '@tiptap/extension-font-family';
 /**
  * Represents the interface for font family options, extending TiptapFontFamilyOptions and GeneralOptions.
  */

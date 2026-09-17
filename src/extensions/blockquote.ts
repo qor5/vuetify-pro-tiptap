@@ -1,16 +1,16 @@
-import type { GeneralOptions } from "@/type";
-import type { BlockquoteOptions as TiptapBlockquoteOptions } from "@tiptap/extension-blockquote";
+import type { BlockquoteOptions as TiptapBlockquoteOptions } from "@tiptap/extension-blockquote"
+import type { GeneralOptions } from "@/type"
 
-import { Blockquote as TiptapBlockquote } from "@tiptap/extension-blockquote";
-import { addCommonAttributes } from "./attribute-config";
+import { Blockquote as TiptapBlockquote } from "@tiptap/extension-blockquote"
+import { addCommonAttributes } from "./attribute-config"
 
-import ActionButton from "./components/ActionButton.vue";
+import ActionButton from "./components/ActionButton.vue"
 
 export interface BlockquoteOptions
   extends TiptapBlockquoteOptions,
     GeneralOptions<BlockquoteOptions> {
   /** HTML attributes that should be allowed on blockquote elements */
-  allowedAttributes?: string[];
+  allowedAttributes?: string[]
 }
 
 export const Blockquote =
@@ -20,15 +20,15 @@ export const Blockquote =
       return addCommonAttributes(
         this.parent?.(),
         "blockquote",
-        this.options.allowedAttributes,
-      );
+        this.options.allowedAttributes
+      )
     },
 
     addOptions() {
       return {
         ...this.parent?.(),
         HTMLAttributes: {
-          class: "blockquote",
+          class: "blockquote"
         },
         button: ({ editor, t }) => ({
           component: ActionButton,
@@ -37,9 +37,9 @@ export const Blockquote =
             isActive: () => editor.isActive("blockquote") || false,
             disabled: !editor.can().toggleBlockquote(),
             icon: "blockquote",
-            tooltip: t("editor.blockquote.tooltip"),
-          },
-        }),
-      };
-    },
-  });
+            tooltip: t("editor.blockquote.tooltip")
+          }
+        })
+      }
+    }
+  })

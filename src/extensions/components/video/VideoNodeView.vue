@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ImageLoadError from '@/extensions/components/image/ImageLoadError.vue'
 import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import { ref } from 'vue'
+import ImageLoadError from '@/extensions/components/image/ImageLoadError.vue'
 
 const props = defineProps(nodeViewProps)
 const loadError = ref(false)

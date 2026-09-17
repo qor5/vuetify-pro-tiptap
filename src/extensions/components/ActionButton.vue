@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { IconsOptions } from '@/constants/icons'
 
+import { computed } from 'vue'
 import { getIcon } from '@/constants/icons'
 import { ButtonViewReturnComponentProps } from '@/type'
-import { computed } from 'vue'
 
 interface Props {
   icon?: keyof IconsOptions

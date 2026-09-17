@@ -2,10 +2,10 @@
 import type { Editor } from '@tiptap/vue-3'
 import type { CreateTablePayload } from './CreateTablePopover.vue'
 
-import { getIcon } from '@/constants/icons'
-import { useLocale } from '@/locales'
-
 import { computed, ref, unref } from 'vue'
+import { getIcon } from '@/constants/icons'
+
+import { useLocale } from '@/locales'
 import CreateTablePopover from './CreateTablePopover.vue'
 
 const props = withDefaults(defineProps<Props>(), {

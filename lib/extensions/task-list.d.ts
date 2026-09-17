@@ -1,6 +1,6 @@
-import { GeneralOptions } from '../type';
 import { TaskItemOptions } from '@tiptap/extension-task-item';
 import { TaskListOptions as TiptapTaskListOptions } from '@tiptap/extension-task-list';
+import { GeneralOptions } from '../type';
 /**
  * Represents the interface for task list options, extending TiptapTaskListOptions and GeneralOptions.
  */

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { IconsOptions } from '@/constants/icons'
 import type { Editor } from '@tiptap/vue-3'
-
 import type { LinkAttrs } from './link/types'
-import { ButtonViewReturnComponentProps } from '@/type'
 
+import type { IconsOptions } from '@/constants/icons'
 import { ref } from 'vue'
+
+import { ButtonViewReturnComponentProps } from '@/type'
 import ActionButton from './ActionButton.vue'
 import OriginalThemeProvider from './OriginalThemeProvider.vue'
 

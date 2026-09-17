@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { ButtonViewReturnComponentProps } from '@/type'
 import type { Editor } from '@tiptap/vue-3'
 import type { StyleValue } from 'vue'
-
-import { getIcon, IconsOptions } from '@/constants/icons'
+import type { ButtonViewReturnComponentProps } from '@/type'
 
 import { computed, ref } from 'vue'
+
+import { getIcon, IconsOptions } from '@/constants/icons'
 import ActionButton from './ActionButton.vue'
 
 const props = withDefaults(defineProps<Props>(), {
