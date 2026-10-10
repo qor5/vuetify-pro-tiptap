@@ -21,6 +21,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Nothing here pushes, tags or opens a PR, so the token checkout writes
+          # into .git/config by default is only an extra thing for a later step --
+          # or a dependency's install script -- to find.
+          persist-credentials: false
 
       - uses: ./.github/actions/build-setup
         with:
