@@ -10,7 +10,10 @@ runs:
   using: composite
   steps:
     - name: Install pnpm
-      uses: pnpm/action-setup@v4
+      # Third-party action, so pinned to a commit rather than a tag: a tag can be
+      # repointed at any time by whoever owns the repository, and this step runs
+      # with the workflow's token. b906aff is what v4 resolves to today.
+      uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
     - name: Install Node.js ${{ inputs.node-version }}
       uses: actions/setup-node@v4
