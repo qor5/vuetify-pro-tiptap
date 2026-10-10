@@ -5,7 +5,7 @@ import type { ButtonViewParams, ButtonViewReturn, ExtensionNameKeys } from '@/ty
 import { deleteSelection } from '@tiptap/pm/commands'
 
 import { IMAGE_SIZE, VIDEO_SIZE } from '@/constants/define'
-import { isString } from '@/utils/utils'
+import { isString, safeLinkHref } from '@/utils/utils'
 import ActionButton from './ActionButton.vue'
 
 /** Represents the floating types for bubble images */
@@ -168,9 +168,12 @@ export const defaultBubbleList = (editor: Editor): BubbleMenuItem[] => [
       icon: 'openInNew',
       action: () => {
         const { href } = editor.getAttributes('link')
-        if (isString(href) && href) {
-          window.open(href, '_blank')
-        }
+        if (!isString(href) || !href) return
+
+        // noopener keeps the opened page from reaching back through
+        // window.opener and navigating this one.
+        const safe = safeLinkHref(href)
+        if (safe) window.open(safe, '_blank', 'noopener,noreferrer')
       }
     }
   },
