@@ -154,7 +154,7 @@ dependencies:
     version: 3.31.3(@tiptap/core@3.31.3)
   '@tiptap/html':
     specifier: ^3.31.3
-    version: 3.31.3(@tiptap/core@3.31.3)(@tiptap/pm@3.31.3)(happy-dom@20.14.5)
+    version: 3.31.3(@tiptap/core@3.31.3)(@tiptap/pm@3.31.3)(happy-dom@21.0.4)
   '@tiptap/pm':
     specifier: ^3.31.3
     version: 3.31.3
@@ -208,6 +208,9 @@ devDependencies:
   fs-extra:
     specifier: ^11.3.2
     version: 11.3.2
+  happy-dom:
+    specifier: ^21.0.4
+    version: 21.0.4
   husky:
     specifier: ^9.1.7
     version: 9.1.7
@@ -2321,7 +2324,7 @@ packages:
       '@tiptap/pm': 3.31.3
     dev: false
 
-  /@tiptap/html@3.31.3(@tiptap/core@3.31.3)(@tiptap/pm@3.31.3)(happy-dom@20.14.5):
+  /@tiptap/html@3.31.3(@tiptap/core@3.31.3)(@tiptap/pm@3.31.3)(happy-dom@21.0.4):
     resolution: {integrity: sha512-kE0/bIopSdECaNX4f/Z+TNgAqWTACFcExJmzhevE7Kx1zsDKcl9rW6poMbOEWdq2HSYxowm3wGbtTHXu6RXZHA==}
     peerDependencies:
       '@tiptap/core': 3.31.3
@@ -2330,7 +2333,7 @@ packages:
     dependencies:
       '@tiptap/core': 3.31.3(@tiptap/pm@3.31.3)
       '@tiptap/pm': 3.31.3
-      happy-dom: 20.14.5
+      happy-dom: 21.0.4
     dev: false
 
   /@tiptap/pm@3.31.3:
@@ -2461,13 +2464,11 @@ packages:
 
   /@types/whatwg-mimetype@3.0.2:
     resolution: {integrity: sha512-c2AKvDT8ToxLIOUlN51gTiHXflsfIFisS4pO7pDPoKouJCESkhZnEy623gwP9laCy5lnLDAw1vAzu2vM2YLOrA==}
-    dev: false
 
   /@types/ws@8.18.2:
     resolution: {integrity: sha512-67MQl+fpWKVTT1NYdnmo3U4sc/xPo/zQBncVnI74qmQa0z/b+1g6iYqNmGCPbxO+zz2aklb08a0oHfegiVd0/w==}
     dependencies:
       '@types/node': 26.6.4
-    dev: false
 
   /@typescript-eslint/eslint-plugin@8.44.0(@typescript-eslint/parser@8.44.0)(eslint@9.35.0)(typescript@5.5.4):
     resolution: {integrity: sha512-EGDAOGX+uwwekcS0iyxVDmRV9HX6FLSM5kzrAToLTsr9OWCIKG/y3lQheCq18yZ5Xh78rRKJiEpP0ZaCs4ryOQ==}
@@ -3286,7 +3287,6 @@ packages:
     engines: {node: '>=4.0'}
     dependencies:
       '@types/node': 26.6.4
-    dev: false
 
   /builtin-modules@3.3.0:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
@@ -4825,8 +4825,8 @@ packages:
       uglify-js: 3.19.3
     dev: true
 
-  /happy-dom@20.14.5:
-    resolution: {integrity: sha512-x/RzkpWO40bTjIoT30iQtt64FLLmH/iRcUCN2X//bLx7H3ifkdfPXyqsro/OYtqzIAhiLMMA7mmiOR9C3NOKjQ==}
+  /happy-dom@21.0.4:
+    resolution: {integrity: sha512-tFm+GaLBgo6o0awHnvHaNoraVo27qJ+2tZEtZ+cIa08hXbeitrxAJajLI05hsUy/2/YTKcUjQYzHe5mCcraLBw==}
     engines: {node: '>=20.0.0'}
     dependencies:
       '@types/node': 26.6.4
@@ -4839,7 +4839,6 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    dev: false
 
   /has-flag@3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
@@ -8215,7 +8214,6 @@ packages:
   /whatwg-mimetype@3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
     engines: {node: '>=12'}
-    dev: false
 
   /which@1.3.1:
     resolution: {integrity: sha512-HxJdYWq1MTIQbJ3nw0cqssHoTNU267KlrDuGZ1WYlxDStUtKUhOaJmh112/TZmHxxUfuJqPXSOm7tDyas0OSIQ==}
@@ -8278,7 +8276,6 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-    dev: false
 
   /xml-name-validator@4.0.0:
     resolution: {integrity: sha512-ICP2e+jsHvAj2E2lIHxa5tjXRlKDJo4IdvPvCXbXQGdzSfmSpNVyIKMvoZHjDY9DP0zV17iI85o90vRFXNccRw==}
