@@ -33,10 +33,20 @@ function isDescriptor(rule: unknown): rule is HrefRuleDescriptor {
   )
 }
 
-function descriptorToRule({ pattern, flags = '', negate = false, message }: HrefRuleDescriptor): HrefRule {
-  // drop stateful flags so `test` gives the same result on every call
-  const re = new RegExp(pattern, flags.replace(/[gy]/g, ''))
+function descriptorToRule({ pattern, flags = '', negate = false, message }: HrefRuleDescriptor): HrefRule | undefined {
+  let re: RegExp
+  try {
+    // drop stateful flags so `test` gives the same result on every call
+    re = new RegExp(pattern, flags.replace(/[gy]/g, ''))
+  } catch (error) {
+    Logger.error(`Invalid hrefRules pattern ignored: /${pattern}/${flags} (${(error as Error).message})`)
+    return undefined
+  }
   return (value: string) => re.test(value ?? '') !== negate || message
+}
+
+function isRule(rule: HrefRule | undefined): rule is HrefRule {
+  return rule !== undefined
 }
 
 function parseJsonRules(source: string): HrefRuleDescriptor[] | undefined {
@@ -67,16 +77,18 @@ export function normalizeHrefRules(hrefRules: HrefRules | undefined): HrefRule[]
   if (!hrefRules) return []
 
   if (Array.isArray(hrefRules)) {
-    return hrefRules.map(rule => (isDescriptor(rule) ? descriptorToRule(rule) : rule))
+    return hrefRules.map(rule => (isDescriptor(rule) ? descriptorToRule(rule) : rule)).filter(isRule)
   }
 
   const descriptors = parseJsonRules(hrefRules) ?? parseLegacyRules(hrefRules)
   if (!descriptors) {
-    Logger.warn(`Unsupported hrefRules ignored: ${hrefRules}. Pass rule functions or a JSON array of { pattern, flags, negate, message }.`)
+    Logger.error(
+      `Unsupported hrefRules ignored, links are NOT validated: ${hrefRules}. Pass rule functions or a JSON array of { pattern, flags, negate, message }.`
+    )
     return []
   }
 
-  return descriptors.map(descriptorToRule)
+  return descriptors.map(descriptorToRule).filter(isRule)
 }
 
 export function useHrefRules(props: { hrefRules?: HrefRules }) {

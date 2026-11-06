@@ -17,7 +17,8 @@ interface Props {
   markdownTheme?: string | false
   xssOptions?: IWhiteList
   /**
-   * Allowed iframe `src` values: a string matches as a URL prefix, a RegExp is tested against the src.
+   * Allowed iframe `src` values: a string matches as a URL prefix ending at a `/`, `?` or `#` boundary
+   * (so `https://youtube.com` does not admit `https://youtube.com.evil.com`), a RegExp is tested against the src.
    * Iframes whose src does not match are rendered without src. Not set means no restriction.
    */
   iframeSrcWhitelist?: Array<string | RegExp>
@@ -58,18 +59,28 @@ const htmlValue = computed<string>(() => {
   return generateHTML(props.value, unref(ext))
 })
 
+function matchesPrefix(src: string, prefix: string): boolean {
+  if (!src.startsWith(prefix)) return false
+  // the prefix must end on a URL boundary, otherwise `https://a.com` would admit `https://a.com.evil.com`
+  return /[/?#]$/.test(prefix) || src.length === prefix.length || '/?#'.includes(src[prefix.length])
+}
+
 function isAllowedIframeSrc(src: string): boolean {
   const whitelist = props.iframeSrcWhitelist
   if (!whitelist) return true
 
-  return whitelist.some(rule => (isString(rule) ? src.startsWith(rule) : rule.test(src)))
+  return whitelist.some(rule => {
+    if (isString(rule)) return matchesPrefix(src, rule)
+    // drop stateful flags so `test` gives the same result for every iframe
+    return new RegExp(rule.source, rule.flags.replace(/[gy]/g, '')).test(src)
+  })
 }
 
 const cleanValue = computed(() => {
   const value = unref(htmlValue)
-    .replace('https://youtu.be/', 'https://www.youtube.com/watch?v=')
-    .replace('watch?v=', 'embed/')
-    .replace('https://vimeo.com/', 'https://player.vimeo.com/video/')
+    .replaceAll('https://youtu.be/', 'https://www.youtube.com/watch?v=')
+    .replaceAll('watch?v=', 'embed/')
+    .replaceAll('https://vimeo.com/', 'https://player.vimeo.com/video/')
 
   const whiteList = props.xssOptions
 
