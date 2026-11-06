@@ -5,8 +5,17 @@ interface Props {
     dark?: boolean;
     dense?: boolean;
     markdownTheme?: string | false;
-    xss?: boolean | string[];
     xssOptions?: IWhiteList;
+    /**
+     * Allowed iframe `src` values: a string matches as a URL prefix ending at a `/`, `?` or `#` boundary
+     * (so `https://youtube.com` does not admit `https://youtube.com.evil.com`), a RegExp is tested against the src.
+     * Iframes whose src does not match are rendered without src. Not set means no restriction.
+     *
+     * Rules are matched against the src that will be loaded, i.e. after YouTube/Vimeo links are converted
+     * to their embed form: whitelist `https://www.youtube.com/embed/` and `https://player.vimeo.com/video/`,
+     * not `https://youtu.be/` or `https://vimeo.com/`.
+     */
+    iframeSrcWhitelist?: Array<string | RegExp>;
     extensions?: AnyExtension[];
 }
 declare function __VLS_template(): {
@@ -24,16 +33,16 @@ declare const __VLS_component: import('vue').DefineComponent<import('vue').Extra
     dark: undefined;
     dense: boolean;
     markdownTheme: undefined;
-    xss: boolean;
     xssOptions: () => IWhiteList;
+    iframeSrcWhitelist: undefined;
     extensions: () => never[];
 }>>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<__VLS_WithDefaults<__VLS_TypePropsToOption<Props>, {
     value: string;
     dark: undefined;
     dense: boolean;
     markdownTheme: undefined;
-    xss: boolean;
     xssOptions: () => IWhiteList;
+    iframeSrcWhitelist: undefined;
     extensions: () => never[];
 }>>> & Readonly<{}>, {
     markdownTheme: string | false;
@@ -41,8 +50,8 @@ declare const __VLS_component: import('vue').DefineComponent<import('vue').Extra
     value: string | JSONContent;
     dark: boolean;
     dense: boolean;
-    xss: boolean | string[];
     xssOptions: IWhiteList;
+    iframeSrcWhitelist: Array<string | RegExp>;
 }, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
 declare const _default: __VLS_WithTemplateSlots<typeof __VLS_component, __VLS_TemplateResult["slots"]>;
 export default _default;

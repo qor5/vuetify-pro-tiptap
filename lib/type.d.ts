@@ -1,6 +1,7 @@
 import { Editor as CoreEditor, Extension, JSONContent } from '@tiptap/core';
 import { Editor } from '@tiptap/vue-3';
 import { IconsOptions } from './constants/icons';
+export type { HrefRule, HrefRuleDescriptor, HrefRules } from './hooks/use-href-rules';
 export type { Editor, JSONContent } from '@tiptap/core';
 /**
  * Represents the onChange event for VuetifyTiptap.
