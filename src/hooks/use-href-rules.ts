@@ -18,7 +18,7 @@ export interface HrefRuleDescriptor {
 /**
  * Rules for validating hrefs in the link/video dialog. Accepts:
  * - an array of rule functions and/or rule descriptors
- * - a JSON string of rule descriptors
+ * - a JSON string of a rule descriptor or an array of them
  * - (deprecated) the legacy JS string form, e.g. `[value => !/^http:\/\//.test(value) || "message"]`;
  *   only `value => [!]/regex/.test(value) || "message"` rules are understood, it is never evaluated
  */
@@ -33,25 +33,23 @@ function isDescriptor(rule: unknown): rule is HrefRuleDescriptor {
   )
 }
 
-function descriptorToRule({ pattern, flags = '', negate = false, message }: HrefRuleDescriptor): HrefRule | undefined {
+function descriptorToRule({ pattern, flags = '', negate = false, message }: HrefRuleDescriptor): HrefRule {
   let re: RegExp
   try {
     // drop stateful flags so `test` gives the same result on every call
     re = new RegExp(pattern, flags.replace(/[gy]/g, ''))
   } catch (error) {
-    Logger.error(`Invalid hrefRules pattern ignored: /${pattern}/${flags} (${(error as Error).message})`)
-    return undefined
+    // fail closed: a rule that cannot be enforced rejects every value instead of silently disappearing
+    Logger.error(`Invalid hrefRules pattern /${pattern}/${flags} rejects every value: ${(error as Error).message}`)
+    return () => message
   }
   return (value: string) => re.test(value ?? '') !== negate || message
-}
-
-function isRule(rule: HrefRule | undefined): rule is HrefRule {
-  return rule !== undefined
 }
 
 function parseJsonRules(source: string): HrefRuleDescriptor[] | undefined {
   try {
     const parsed = JSON.parse(source)
+    if (isDescriptor(parsed)) return [parsed]
     if (Array.isArray(parsed) && parsed.every(isDescriptor)) return parsed
   } catch {}
   return undefined
@@ -77,7 +75,7 @@ export function normalizeHrefRules(hrefRules: HrefRules | undefined): HrefRule[]
   if (!hrefRules) return []
 
   if (Array.isArray(hrefRules)) {
-    return hrefRules.map(rule => (isDescriptor(rule) ? descriptorToRule(rule) : rule)).filter(isRule)
+    return hrefRules.map(rule => (isDescriptor(rule) ? descriptorToRule(rule) : rule))
   }
 
   const descriptors = parseJsonRules(hrefRules) ?? parseLegacyRules(hrefRules)
@@ -88,7 +86,7 @@ export function normalizeHrefRules(hrefRules: HrefRules | undefined): HrefRule[]
     return []
   }
 
-  return descriptors.map(descriptorToRule).filter(isRule)
+  return descriptors.map(descriptorToRule)
 }
 
 export function useHrefRules(props: { hrefRules?: HrefRules }) {

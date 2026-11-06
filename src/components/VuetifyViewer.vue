@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { AnyExtension, JSONContent } from '@tiptap/core'
-import type { IWhiteList } from 'xss'
+import type { ICSSFilter, IWhiteList } from 'xss'
 import { generateHTML } from '@tiptap/html'
 import { computed, unref } from 'vue'
 import { useTheme } from 'vuetify'
-import Xss, { friendlyAttrValue } from 'xss'
+import Xss, { friendlyAttrValue, safeAttrValue } from 'xss'
 
 import xssRules from '@/constants/xss-rules'
 import { useContext, useMarkdownTheme } from '@/hooks'
@@ -20,6 +20,10 @@ interface Props {
    * Allowed iframe `src` values: a string matches as a URL prefix ending at a `/`, `?` or `#` boundary
    * (so `https://youtube.com` does not admit `https://youtube.com.evil.com`), a RegExp is tested against the src.
    * Iframes whose src does not match are rendered without src. Not set means no restriction.
+   *
+   * Rules are matched against the src that will be loaded, i.e. after YouTube/Vimeo links are converted
+   * to their embed form: whitelist `https://www.youtube.com/embed/` and `https://player.vimeo.com/video/`,
+   * not `https://youtu.be/` or `https://vimeo.com/`.
    */
   iframeSrcWhitelist?: Array<string | RegExp>
   extensions?: AnyExtension[]
@@ -59,38 +63,59 @@ const htmlValue = computed<string>(() => {
   return generateHTML(props.value, unref(ext))
 })
 
+function toEmbedUrl(src: string): string {
+  return src
+    .replace('https://youtu.be/', 'https://www.youtube.com/watch?v=')
+    .replace('watch?v=', 'embed/')
+    .replace('https://vimeo.com/', 'https://player.vimeo.com/video/')
+}
+
+// normalize scheme/host case and default ports, so `https://YouTube.com:443/x` matches `https://youtube.com`
+function normalizeUrl(url: string): string {
+  try {
+    return new URL(url).href
+  } catch {
+    return url
+  }
+}
+
 function matchesPrefix(src: string, prefix: string): boolean {
   if (!src.startsWith(prefix)) return false
   // the prefix must end on a URL boundary, otherwise `https://a.com` would admit `https://a.com.evil.com`
   return /[/?#]$/.test(prefix) || src.length === prefix.length || '/?#'.includes(src[prefix.length])
 }
 
-function isAllowedIframeSrc(src: string): boolean {
-  const whitelist = props.iframeSrcWhitelist
-  if (!whitelist) return true
-
-  return whitelist.some(rule => {
-    if (isString(rule)) return matchesPrefix(src, rule)
+const iframeSrcMatchers = computed<Array<(src: string) => boolean> | undefined>(() =>
+  props.iframeSrcWhitelist?.map(rule => {
+    if (isString(rule)) {
+      const prefix = normalizeUrl(rule)
+      return (src: string) => matchesPrefix(normalizeUrl(src), prefix)
+    }
     // drop stateful flags so `test` gives the same result for every iframe
-    return new RegExp(rule.source, rule.flags.replace(/[gy]/g, '')).test(src)
+    const re = new RegExp(rule.source, rule.flags.replace(/[gy]/g, ''))
+    return (src: string) => re.test(src)
   })
+)
+
+function isAllowedIframeSrc(src: string): boolean {
+  const matchers = unref(iframeSrcMatchers)
+  if (!matchers) return true
+
+  return matchers.some(match => match(src))
 }
 
 const cleanValue = computed(() => {
-  const value = unref(htmlValue)
-    .replaceAll('https://youtu.be/', 'https://www.youtube.com/watch?v=')
-    .replaceAll('watch?v=', 'embed/')
-    .replaceAll('https://vimeo.com/', 'https://player.vimeo.com/video/')
-
   const whiteList = props.xssOptions
 
-  return Xss(value, {
+  return Xss(unref(htmlValue), {
     whiteList,
     css: false,
-    onTagAttr(tag, name, attrValue) {
-      if (tag === 'iframe' && name === 'src' && !isAllowedIframeSrc(friendlyAttrValue(attrValue))) {
-        return ''
-      }
+    onTagAttr(tag, name, attrValue, isWhiteAttr) {
+      if (tag !== 'iframe' || name !== 'src' || !isWhiteAttr) return
+
+      // cssFilter is only used for `style`, so it is not needed for `src`
+      const src = safeAttrValue(tag, name, toEmbedUrl(attrValue), undefined as unknown as ICSSFilter)
+      return src && isAllowedIframeSrc(friendlyAttrValue(src)) ? `src="${src}"` : ''
     }
   })
 })
