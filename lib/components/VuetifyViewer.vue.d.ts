@@ -10,6 +10,10 @@ interface Props {
      * Allowed iframe `src` values: a string matches as a URL prefix ending at a `/`, `?` or `#` boundary
      * (so `https://youtube.com` does not admit `https://youtube.com.evil.com`), a RegExp is tested against the src.
      * Iframes whose src does not match are rendered without src. Not set means no restriction.
+     *
+     * Rules are matched against the src that will be loaded, i.e. after YouTube/Vimeo links are converted
+     * to their embed form: whitelist `https://www.youtube.com/embed/` and `https://player.vimeo.com/video/`,
+     * not `https://youtu.be/` or `https://vimeo.com/`.
      */
     iframeSrcWhitelist?: Array<string | RegExp>;
     extensions?: AnyExtension[];

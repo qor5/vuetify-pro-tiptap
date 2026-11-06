@@ -13,7 +13,7 @@ export interface HrefRuleDescriptor {
 /**
  * Rules for validating hrefs in the link/video dialog. Accepts:
  * - an array of rule functions and/or rule descriptors
- * - a JSON string of rule descriptors
+ * - a JSON string of a rule descriptor or an array of them
  * - (deprecated) the legacy JS string form, e.g. `[value => !/^http:\/\//.test(value) || "message"]`;
  *   only `value => [!]/regex/.test(value) || "message"` rules are understood, it is never evaluated
  */
