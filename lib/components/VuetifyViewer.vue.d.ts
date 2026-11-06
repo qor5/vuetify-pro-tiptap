@@ -7,7 +7,8 @@ interface Props {
     markdownTheme?: string | false;
     xssOptions?: IWhiteList;
     /**
-     * Allowed iframe `src` values: a string matches as a URL prefix, a RegExp is tested against the src.
+     * Allowed iframe `src` values: a string matches as a URL prefix ending at a `/`, `?` or `#` boundary
+     * (so `https://youtube.com` does not admit `https://youtube.com.evil.com`), a RegExp is tested against the src.
      * Iframes whose src does not match are rendered without src. Not set means no restriction.
      */
     iframeSrcWhitelist?: Array<string | RegExp>;
