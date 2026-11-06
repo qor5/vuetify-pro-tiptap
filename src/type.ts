@@ -7,6 +7,7 @@ import type { Editor } from "@tiptap/vue-3"
 
 import type { IconsOptions } from "./constants/icons"
 
+export type { HrefRule, HrefRuleDescriptor, HrefRules } from "./hooks/use-href-rules"
 export type { Editor, JSONContent } from "@tiptap/core"
 
 /**
@@ -114,5 +115,3 @@ export interface ButtonViewParams<T = any> {
 export interface ButtonView<T = any> {
   (options: ButtonViewParams<T>): ButtonViewReturn | ButtonViewReturn[]
 }
-
-export type { HrefRule, HrefRuleDescriptor, HrefRules } from './hooks/use-href-rules'

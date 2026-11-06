@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Editor } from '@tiptap/vue-3'
+import type { HrefRules } from '@/hooks/use-href-rules'
 import { computed, ref, unref, watchEffect } from 'vue'
 import { getIcon } from '@/constants/icons'
-import type { HrefRules } from '@/hooks/use-href-rules'
 import { useHrefRules } from '@/hooks/use-href-rules'
 import { useLocale } from '@/locales'
 
